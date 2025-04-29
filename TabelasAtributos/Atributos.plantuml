@@ -1,0 +1,224 @@
+@startuml tableBD
+/'
+Um produto ele pode ser utilizado numa operação
+O professor ele deixa não usar esta forma
+'/
+
+/'
+Meter tabela de fornecedor 
+ligado aos Materias e 
+OperacaoSubContratada
+'/
+
+/'
+Agregações:
+Funcionario com Departamento
+Departamento com OperaçãoInterna
+FichaTecnica com Operacao
+
+Composições:
+Produto com Ordem de fabrico
+Cliente com Ordem de fabrico
+Produto com Ficha Tecnica
+OperacaoSubContratada com Operacao
+OperacaoInterna com Operacao
+'/
+
+/'
+Define os produtos a fabricar,
+Quantidades necessárias
+Prazos de conclusão
+'/
+class OrdemFabrico {
+    ManufacturingNo ManufacturingNo
+    ProductNo ProductNo
+    float ProductionCost
+    float CostCharged
+    string Status 
+    DateTime CreationDate
+    DateTime StarDate
+    DateTime EndDate
+    String Priority
+}   
+
+class Produtos {
+    ProductNo ProductNo
+    string Name 
+    float Price 
+    string ProductType
+    FichTecNo FichTecNo
+    string Descricao
+    string Genero
+}
+
+class ProdutoQuantidade {
+    ManufacturingNo ManufacturingNo
+    ProductNo ProductNo
+    int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+}
+
+/'
+Conjunto de operações necessarias para a produção
+de um produto
+'/
+class FichaTecnica {
+    FichTecNo FichTecNo
+    FuncNo TecnicoResp 
+    OpNo Operacoes 
+    MatNo Materiais 
+    string Tamanho 
+    float Peso 
+    string Obs
+}
+
+class FichaTecnicaOperacao {
+    FichTecNo FichTecNo
+    OpNo OpNo
+}
+
+class FichaTecnicaMateriais {
+    FichTecNo FichTecNo
+    MatNo MatNo 
+}
+
+/'
+Materias utilizados nas operacoes;
+'/
+class Materiais {
+    MatNo MatNo 
+    string Name 
+    FornNo FornNo 
+    Float Price 
+    string Obs  
+}
+
+/'
+Parceiro externo que pode desenvolver uma operação
+Ver se apenas um subContratado pode fazer uma e so uma operação
+'/
+class Operacao {
+    OpNo OpNo 
+    TypeNo OpNo 
+    string Name 
+    string Obs
+}
+
+class OperacaoSubContratados {
+    OpNo OpSubNo
+    FornNo FornNo 
+    float Price
+}
+
+/'Operacoes feitas pelo propria empresa'/
+class OperacaoInterna {
+    OpNo OpIntNo
+    DeptNo DeptNo 
+    MatNo MatNo 
+}
+
+class OperacaoInternaMaterial {
+    OpNo OpIntNo
+    MatNo MatNo 
+}
+
+/'Extras se quissermos complicar'/
+
+/'Setor da fabrica responsável por uma determinada
+operacao'/
+class Departamento {
+    DeptNo DeptNo 
+    string Name 
+    FuncNo SuperVisNo
+}
+
+/'
+Funcionario da fabrica, que faz parte de um setor
+'/
+class Funcionario {
+    FuncNo FuncNo
+    string DeptNo 
+    string Fname 
+    string Lname 
+    Sex Sex
+    string Position
+    float Salary
+    number PhoneNumber 
+    string Email 
+    string Address
+    date DOB
+}
+
+class Cliente {
+    ClientNo ClientNo
+    string Fname
+    string Lname
+    Sex Sex
+    number NIF 
+    number PhoneNumber 
+    string Email
+    string Address 
+    date DOB 
+    string Type 
+}
+
+class Fornecedor {
+    string FornNo 
+    string Name 
+    number PhoneNumber
+    string Email 
+    string Address
+    string Type 
+}
+
+/'
+Relacionamento dos Funcionarios
+'/
+Funcionario }|--|| Departamento
+Funcionario ||--o{ Departamento 
+
+/'
+Relacionamento do Fornecedor
+'/
+Fornecedor ||--o{ Materiais
+Fornecedor ||--o{ OperacaoSubContratados
+
+/'
+Relacionamento Operacao
+'/
+Operacao ||--o{ OperacaoInterna
+Operacao ||--o{ OperacaoSubContratados
+Operacao ||--o{ FichaTecnicaOperacao
+
+/'
+Relacionamento das Operacoes Interna
+'/
+OperacaoInterna ||--|| Departamento
+OperacaoInterna ||---o{ OperacaoInternaMaterial
+
+/'
+Relacionamento Materiais
+'/
+Materiais ||---o{ OperacaoInternaMaterial
+Materiais ||---o{ FichaTecnicaMateriais
+
+/'
+Relacionamento da Ficha Tecnica
+'/
+FichaTecnica ||---o{ FichaTecnicaOperacao
+FichaTecnica ||--o{ FichaTecnicaMateriais
+
+/'
+Relacionamentos do Produto
+'/
+Produtos ||--|| FichaTecnica
+Produtos ||---o{ ProdutoQuantidade
+
+/'
+Relacionamento Ordem Fabrico
+'/
+OrdemFabrico ||--|{ ProdutoQuantidade
+Cliente ||--|{ OrdemFabrico
+
+@enduml
