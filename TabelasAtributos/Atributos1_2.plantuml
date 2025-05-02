@@ -1,13 +1,14 @@
 @startuml tableBD
+
+/'
+Falta SubContratados, subContratos
+'/
+
+
 /'
 Ainda é o concetual
 '/
 
-/'
-Meter tabela de fornecedor 
-ligado aos Materias e 
-OperacaoSubContratada
-'/
 
 /'
 Agregações:
@@ -24,13 +25,17 @@ OperacaoInterna com Operacao
 '/
 
 /'
-Define os produtos a fabricar,
+Define os Produto a fabricar,
 Quantidades necessárias
 Prazos de conclusão
+
+int ExpectedQuantity
+int MadeAmount
+int DiscardedAmount (Este 3 atributos diz respeito a quantidade produzida por produto)
+
 '/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    ProductNo ProductNo
     float ProductionCost
     float CostCharged
     string Status 
@@ -38,24 +43,18 @@ class OrdemFabrico {
     DateTime StarDate
     DateTime EndDate
     String Priority
+    float perdas 
+    string unidadePerdas
+    int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+    string Obs
 }   
 
-class Stock {
-    StockNo StockNo
-    ProductNo ProductNo
-    int Quantity
-    string medida
-    string Obs
-}
-
-class Perdas {
-    PerdaNo PerdaNo
-    ProductNo ProductNo
-    float totPerda 
-    string unidade
-    string Obs
-}
-class Produtos {
+/'
+O stock é quantidade que tem de produto
+'/
+class Produto {
     ProductNo ProductNo
     string Name 
     float Price 
@@ -63,14 +62,8 @@ class Produtos {
     FichTecNo FichTecNo
     string Descricao
     string Genero
-}
-
-class ProdutoQuantidade {
-    ManufacturingNo ManufacturingNo
-    ProductNo ProductNo
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
+    float stock 
+    string unidadeStock
 }
 
 /'
@@ -102,20 +95,10 @@ class Operacao {
     string Name 
     string Obs
     float percentagem
+    sfloat perdas 
+    string unidadePerdas
 }
 
-class OperacaoPerda {
-    OpNo OpNo 
-    PerdaNo PerdaNo
-}
-
-class OperacaoProduto { 
-    OpNo OpNo 
-    ProductNo ProductNo
-    float qunatidade
-    float percentagem
-    TypePerda type
-}
 
 /'Extras se quissermos complicar'/
 
@@ -124,7 +107,6 @@ operacao'/
 class Departamento {
     DeptNo DeptNo 
     string Name 
-    FuncNo SuperVisNo
 }
 
 /'
@@ -175,31 +157,27 @@ Funcionario ||--o{ Departamento: SuperVisiona
 /'
 Relacionamento do Fornecedor
 '/
-Fornecedor |o--o{ Produtos: Fornece produto
+Fornecedor |o--o{ Produto: Fornece produto
 Fornecedor |o--o{ Operacao: Fornece operacao
 
 /'
 Relacionamento Operacao
 '/
 Operacao ||--o{ FichaTecnicaOperacao: Faz parte
-Operacao ||---o{ OperacaoPerda
 
 /'
 Relacionamento Perdas
 '/
-Perdas ||--o{ OperacaoPerda: Tem
 
 /'
 Relacionamento das Operacoes Interna
 '/
 Operacao ||--o| Departamento: Realiza(da)
-Operacao |o---o{ OperacaoProduto: Necessita
 
 /'S
 Relacionamento Materiais
 '/
-Produtos |o---o{ OperacaoProduto: Usado
-Produtos ||--|| Stock: Tem em stock
+Produto }o---o{ FichaTecnicaOperacao: Usado
 
 /'
 Relacionamento da Ficha Tecnica
@@ -209,13 +187,12 @@ FichaTecnica ||---o{ FichaTecnicaOperacao: Possui
 /'
 Relacionamentos do Produto
 '/
-Produtos ||--|| FichaTecnica: Possui
-Produtos ||---o{ ProdutoQuantidade
+Produto ||--|| FichaTecnica: Possui
+Produto }o---o{ OrdemFabrico
 
 /'
 Relacionamento Ordem Fabrico
 '/
-OrdemFabrico ||--|{ ProdutoQuantidade
 Cliente ||--o{ OrdemFabrico: Contrata
 
 @enduml

@@ -36,6 +36,10 @@ class Produtos {
     ProductNo ProductNo
 }
 
+class Stock {
+    StockNo StockNo
+}
+
 class ProdutoQuantidade {
 }
 
@@ -94,8 +98,8 @@ Funcionario ||--o{ Departamento
 /'
 Relacionamento do Fornecedor
 '/
-Fornecedor ||--o{ Produtos
-Fornecedor ||--o{ Operacao
+Fornecedor |o--o{ Produtos
+Fornecedor |o--o{ Operacao
 
 /'
 Relacionamento Operacao
@@ -105,14 +109,14 @@ Operacao ||--o{ FichaTecnicaOperacao
 /'
 Relacionamento das Operacoes Interna
 '/
-Operacao ||--|| Departamento
-Operacao ||---o{ OperacaoProduto
+Operacao ||--o| Departamento
+Operacao |o---o{ OperacaoProduto
 
 /'S
 Relacionamento Materiais
 '/
-Produtos ||---o{ OperacaoProduto
-
+Produtos |o---o{ OperacaoProduto
+Produtos ||--|| Stock
 /'
 Relacionamento da Ficha Tecnica
 '/
@@ -128,6 +132,6 @@ Produtos ||---o{ ProdutoQuantidade
 Relacionamento Ordem Fabrico
 '/
 OrdemFabrico ||--|{ ProdutoQuantidade
-Cliente ||--|{ OrdemFabrico
+Cliente ||--o{ OrdemFabrico
 
 @enduml
