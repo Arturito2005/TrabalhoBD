@@ -79,10 +79,10 @@ de um produto
 class FichaTecnica {
     FichTecNo FichTecNo
     FuncNo TecnicoResp 
-    OpNo Operacoes 
-    string Tamanho 
+    OpNo Operacoes
+    string Tamanho
     float Peso
-    float Perdas 
+    float Perdas
     string Obs
 }
 
@@ -110,8 +110,18 @@ class Operacao {
     string unidadePerdas
 }
 
+/'
+Se a fabrica embia materiais para eles, 
+deve ter um campo para isso.
+'/
 class SubContrato {
     SubContrato subContrato
+    string produtoDesenvolver
+    string fornecedor 
+    Date duracao
+    string Obs
+    string preco
+    float quantidadeDesenvolvida
 }
 
 
