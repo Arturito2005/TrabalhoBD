@@ -53,6 +53,11 @@ class OrdemFabrico {
 
 /'
 O stock é quantidade que tem de produto
+O fornecedor vai ter os campos da tabela e o produto 
+pode ter varios
+
+Talvez haja uma tabela materiais que liga juntamente
+ao produto há tabela operação
 '/
 class Produto {
     ProductNo ProductNo
@@ -64,6 +69,7 @@ class Produto {
     string Genero
     float stock 
     string unidadeStock
+    string fornecedor 
 }
 
 /'
@@ -80,6 +86,11 @@ class FichaTecnica {
     string Obs
 }
 
+/'
+Penso que o setor não quer isto, ele vai querer
+secalhar que em vez disto, liguemos o produto e a 
+operacao diretamente ha ordem de Fabrico
+'/
 class FichaTecnicaOperacao {
     FichTecNo FichTecNo
     OpNo OpNo
@@ -97,6 +108,10 @@ class Operacao {
     float percentagem
     sfloat perdas 
     string unidadePerdas
+}
+
+class SubContrato {
+    SubContrato subContrato
 }
 
 
@@ -139,6 +154,8 @@ class Cliente {
     string Type  
 }
 
+/'
+Vai estar dentro do Produto
 class Fornecedor {
     string FornNo 
     string Name 
@@ -148,17 +165,13 @@ class Fornecedor {
     string Type 
 }
 
+'/
+
 /'
 Relacionamento dos Funcionarios
 '/
 Funcionario }|--|| Departamento: Possui
 Funcionario ||--o{ Departamento: SuperVisiona 
-
-/'
-Relacionamento do Fornecedor
-'/
-Fornecedor |o--o{ Produto: Fornece produto
-Fornecedor |o--o{ Operacao: Fornece operacao
 
 /'
 Relacionamento Operacao
