@@ -1,0 +1,90 @@
+@startuml tableBD
+
+class OrdemFabrico {
+    ManufacturingNo ManufacturingNo
+}   
+
+/'
+O stock é quantidade que tem de produto
+O fornecedor vai ter os campos da tabela e o produto 
+pode ter varios
+
+Talvez haja uma tabela materiais que liga juntamente
+ao produto há tabela operação
+'/
+class Produto {
+    ProductNo ProductNo
+}
+
+/'
+Conjunto de operações necessarias para a produção
+de um produto
+'/
+class FichaTecnica {
+    FichTecNo FichTecNo
+}
+
+/'
+Parceiro externo que pode desenvolver uma operação
+Ver se apenas um subContratado pode fazer uma e so uma operação
+'/
+class Operacao {
+    OpNo OpNo 
+}
+
+/'
+Se a fabrica embia materiais para eles, 
+deve ter um campo para isso.
+'/
+class SubContratado {
+    SubContratado SubContratado
+}
+
+
+/'Extras se quissermos complicar'/
+
+/'Setor da fabrica responsável por uma determinada
+operacao'/
+class Departamento {
+    DeptNo DeptNo 
+}
+
+/'
+Funcionario da fabrica, que faz parte de um setor
+'/
+class Funcionario {
+    FuncNo FuncNo
+}
+
+class Cliente {
+    ClientNo ClientNo
+}
+
+/'
+Relacionamento dos Funcionarios
+'/
+Funcionario }|--|| Departamento: Possui
+Funcionario ||--o{ Departamento: SuperVisiona 
+
+/'
+Relacionamento das Operacoes Interna
+'/
+Operacao ||--o| Departamento: Realiza(da)
+Operacao |o--o{ SubContratado
+/'
+Relacionamento Ficha Tecnica
+'/
+FichaTecnica }|--|{ Operacao
+
+/'
+Relacionamentos do Produto
+'/
+Produto ||--|| FichaTecnica: Possui
+Produto }o---o{ OrdemFabrico
+
+/'
+Relacionamento Ordem Fabrico
+'/
+Cliente ||--o{ OrdemFabrico: Contrata
+
+@enduml

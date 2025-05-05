@@ -1,7 +1,7 @@
 @startuml tableBD
 
 /'
-Falta SubContratados, subContratos
+Falta SubContratados, SubContratados
 '/
 
 
@@ -87,16 +87,6 @@ class FichaTecnica {
 }
 
 /'
-Penso que o setor não quer isto, ele vai querer
-secalhar que em vez disto, liguemos o produto e a 
-operacao diretamente ha ordem de Fabrico
-'/
-class FichaTecnicaOperacao {
-    FichTecNo FichTecNo
-    OpNo OpNo
-}
-
-/'
 Parceiro externo que pode desenvolver uma operação
 Ver se apenas um subContratado pode fazer uma e so uma operação
 '/
@@ -114,8 +104,8 @@ class Operacao {
 Se a fabrica embia materiais para eles, 
 deve ter um campo para isso.
 '/
-class SubContrato {
-    SubContrato subContrato
+class SubContratado {
+    SubContratado SubContratado
     string produtoDesenvolver
     string fornecedor 
     Date duracao
@@ -165,47 +155,20 @@ class Cliente {
 }
 
 /'
-Vai estar dentro do Produto
-class Fornecedor {
-    string FornNo 
-    string Name 
-    number PhoneNumber
-    string Email 
-    string Address
-    string Type 
-}
-
-'/
-
-/'
 Relacionamento dos Funcionarios
 '/
 Funcionario }|--|| Departamento: Possui
 Funcionario ||--o{ Departamento: SuperVisiona 
 
 /'
-Relacionamento Operacao
-'/
-Operacao ||--o{ FichaTecnicaOperacao: Faz parte
-
-/'
-Relacionamento Perdas
-'/
-
-/'
 Relacionamento das Operacoes Interna
 '/
 Operacao ||--o| Departamento: Realiza(da)
-
-/'S
-Relacionamento Materiais
-'/
-Produto }o---o{ FichaTecnicaOperacao: Usado
-
+Operacao |o--o{ SubContratado
 /'
-Relacionamento da Ficha Tecnica
+Relacionamento Ficha Tecnica
 '/
-FichaTecnica ||---o{ FichaTecnicaOperacao: Possui
+FichaTecnica }|--|{ Operacao
 
 /'
 Relacionamentos do Produto
