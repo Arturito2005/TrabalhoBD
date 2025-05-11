@@ -77,12 +77,6 @@ class Produto {
     string unidadeStock
 }
 
-class ProdutoOrdermFabrico {
-    ProductNo ProductNo 
-    FichaTecnicaNo FichaTecnicaNo
-    ManufacturingNo ManufacturingNo
-}
-
 /'
 Conjunto de operações necessarias para a produção
 de um produto
