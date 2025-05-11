@@ -1,0 +1,32 @@
+@startuml tableBD
+
+
+class Produto {
+    string codProd_PK
+    string Name
+    float Price
+    string ProducType 
+    string Descricao 
+    string codStock 
+    float quantidade 
+    string unidadeStock 
+}
+
+class FichaTecnica {
+    string codFichaTecnica 
+    string codOperacoes
+    string Tamanho
+    string Genero  
+    string Peso 
+    string Obs 
+    string codPerda 
+    float totPerda 
+    string unidadePerda 
+}
+
+class ProdutoFichaTecnica {
+    string codProd_PK
+    string codFichaTecnica_PK
+}
+
+@enduml

@@ -1,14 +1,14 @@
 @startuml tableBD
-/'
-Um produto ele pode ser utilizado numa operação
-O professor ele deixa não usar esta forma
-'/
 
 /'
-Meter tabela de fornecedor 
-ligado aos Materias e 
-OperacaoSubContratada
+Falta SubContratados, SubContratados
 '/
+
+
+/'
+Ainda é o concetual
+'/
+
 
 /'
 Agregações:
@@ -25,38 +25,53 @@ OperacaoInterna com Operacao
 '/
 
 /'
-Define os produtos a fabricar,
+Define os Produto a fabricar,
 Quantidades necessárias
 Prazos de conclusão
+
+int ExpectedQuantity
+int MadeAmount
+int DiscardedAmount (Este 3 atributos diz respeito a quantidade produzida por produto)
+
 '/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    ProductNo ProductNo
-    float ProductionCost
-    float CostCharged
-    string Status 
-    DateTime CreationDate
-    DateTime StarDate
-    DateTime EndDate
-    String Priority
-}   
-
-class Produtos {
-    ProductNo ProductNo
-    string Name 
-    float Price 
-    string ProductType
-    FichTecNo FichTecNo
-    string Descricao
-    string Genero
-}
-
-class ProdutoQuantidade {
-    ManufacturingNo ManufacturingNo
-    ProductNo ProductNo
     int ExpectedQuantity
     int MadeAmount
     int DiscardedAmount
+    PerdaNo perdaNo 
+    nvarchar[50] name 
+    number percentagem 
+    number valorPerda
+    nvarchar[5] unidade
+    float ProductionCost
+    float CostCharged
+    nvarchar[9] Status 
+    DateTime CreationDate
+    DateTime StarDate
+    DateTime EndDate
+    number Priority
+    nvarchar[250] Obs
+}   
+
+/'
+O stock é quantidade que tem de produto
+O fornecedor vai ter os campos da tabela e o produto 
+pode ter varios
+
+Talvez haja uma tabela materiais que liga juntamente
+ao produto há tabela operação
+'/
+class Produto {
+    ProductNo ProductNo
+    nvarchar[30] Name 
+    number Price 
+    nvarchar[20] ProductType
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    StockNo stockNo
+    float stock 
+    string unidadeStock
 }
 
 /'
@@ -66,32 +81,11 @@ de um produto
 class FichaTecnica {
     FichTecNo FichTecNo
     FuncNo TecnicoResp 
-    OpNo Operacoes 
-    MatNo Materiais 
-    string Tamanho 
-    float Peso 
-    string Obs
-}
-
-class FichaTecnicaOperacao {
-    FichTecNo FichTecNo
-    OpNo OpNo
-}
-
-class FichaTecnicaMateriais {
-    FichTecNo FichTecNo
-    MatNo MatNo 
-}
-
-/'
-Materias utilizados nas operacoes;
-'/
-class Materiais {
-    MatNo MatNo 
-    string Name 
-    FornNo FornNo 
-    Float Price 
-    string Obs  
+    nvarchar[5] Tamanho
+    float Peso
+    float Perdas
+    nvarchar[30] cor
+    nvarchar[250] Obs
 }
 
 /'
@@ -100,28 +94,25 @@ Ver se apenas um subContratado pode fazer uma e so uma operação
 '/
 class Operacao {
     OpNo OpNo 
-    TypeNo OpNo 
-    string Name 
-    string Obs
+    Type type 
+    nvarchar[30] Name 
+    nvarchar[250] Obs
 }
 
-class OperacaoSubContratados {
-    OpNo OpSubNo
-    FornNo FornNo 
-    float Price
+/'
+ExpectedTime, acho que é o unico que não é preciso
+'/
+class SubContratado {
+    SubContratado SubContratado
+    FornNo codForn 
+    nvarchar[50] name
+    PhoneNumber PhoneNumber
+    char[50] email
+    nvarchar[150] address
+    number price 
+    dateTime expectedTime 
 }
 
-/'Operacoes feitas pelo propria empresa'/
-class OperacaoInterna {
-    OpNo OpIntNo
-    DeptNo DeptNo 
-    MatNo MatNo 
-}
-
-class OperacaoInternaMaterial {
-    OpNo OpIntNo
-    MatNo MatNo 
-}
 
 /'Extras se quissermos complicar'/
 
@@ -129,8 +120,8 @@ class OperacaoInternaMaterial {
 operacao'/
 class Departamento {
     DeptNo DeptNo 
-    string Name 
-    FuncNo SuperVisNo
+    nvarchar[30] Name
+    FuncNo SupVisNo 
 }
 
 /'
@@ -138,87 +129,56 @@ Funcionario da fabrica, que faz parte de um setor
 '/
 class Funcionario {
     FuncNo FuncNo
-    string DeptNo 
-    string Fname 
-    string Lname 
+    nvarchar[20] Fname
+    nvarchar[20] Lname
     Sex Sex
-    string Position
+    nvarchar[25] Position
     float Salary
-    number PhoneNumber 
-    string Email 
-    string Address
+    PhoneNumber PhoneNumber 
+    char[50] email
+    nvarchar[150] Address
     date DOB
 }
 
 class Cliente {
     ClientNo ClientNo
-    string Fname
-    string Lname
+    nvarchar[20] Fname
+    nvarchar[20] Lname
     Sex Sex
     number NIF 
-    number PhoneNumber 
-    string Email
-    string Address 
+    PhoneNumber PhoneNumber 
+    char[50] email
+    nvarchar[150] Address 
     date DOB 
-    string Type 
-}
-
-class Fornecedor {
-    string FornNo 
-    string Name 
-    number PhoneNumber
-    string Email 
-    string Address
-    string Type 
+    nvarchar[11] Type  
 }
 
 /'
 Relacionamento dos Funcionarios
 '/
-Funcionario }|--|| Departamento
-Funcionario ||--o{ Departamento 
-
-/'
-Relacionamento do Fornecedor
-'/
-Fornecedor ||--o{ Materiais
-Fornecedor ||--o{ OperacaoSubContratados
-
-/'
-Relacionamento Operacao
-'/
-Operacao ||--o{ OperacaoInterna
-Operacao ||--o{ OperacaoSubContratados
-Operacao ||--o{ FichaTecnicaOperacao
+Funcionario }|--o| Departamento: Possui
+Funcionario ||--o{ Departamento: SuperVisiona 
 
 /'
 Relacionamento das Operacoes Interna
 '/
-OperacaoInterna ||--|| Departamento
-OperacaoInterna ||---o{ OperacaoInternaMaterial
-
+Operacao }|--o| Departamento: Realiza(da)
 /'
-Relacionamento Materiais
+Relacionamento Ficha Tecnica
 '/
-Materiais ||---o{ OperacaoInternaMaterial
-Materiais ||---o{ FichaTecnicaMateriais
-
-/'
-Relacionamento da Ficha Tecnica
-'/
-FichaTecnica ||---o{ FichaTecnicaOperacao
-FichaTecnica ||--o{ FichaTecnicaMateriais
+FichaTecnica }o--|{ Operacao
+FichaTecnica }o--|{ Produto: Utiliza(do)
 
 /'
 Relacionamentos do Produto
 '/
-Produtos ||--|| FichaTecnica
-Produtos ||---o{ ProdutoQuantidade
+Produto |o--o{ FichaTecnica: Possui
+Produto }o--o{ OrdemFabrico
 
 /'
 Relacionamento Ordem Fabrico
 '/
-OrdemFabrico ||--|{ ProdutoQuantidade
-Cliente ||--|{ OrdemFabrico
+OrdemFabrico }o--o| Cliente: Contrata
+OrdemFabrico }o--o{ SubContratado
 
 @enduml

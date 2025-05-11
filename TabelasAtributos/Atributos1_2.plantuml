@@ -36,19 +36,24 @@ int DiscardedAmount (Este 3 atributos diz respeito a quantidade produzida por pr
 '/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    float ProductionCost
-    float CostCharged
-    string Status 
-    DateTime CreationDate
-    DateTime StarDate
-    DateTime EndDate
-    String Priority
-    float perdas 
-    string unidadePerdas
+    OpNo SubContratados
+    ProductNo ProductNo
     int ExpectedQuantity
     int MadeAmount
     int DiscardedAmount
-    string Obs
+    PerdaNo perdaNo 
+    nvarchar[50] name 
+    number percentagem 
+    number valorPerda
+    nvarchar[5] unidade
+    number ProductionCost
+    number CostCharged
+    nvarchar[9] Status 
+    DateTime CreationDate
+    DateTime StarDate
+    DateTime EndDate
+    number Priority
+    nvarchar[250] Obs
 }   
 
 /'
@@ -61,15 +66,21 @@ ao produto há tabela operação
 '/
 class Produto {
     ProductNo ProductNo
-    string Name 
-    float Price 
-    string ProductType
+    nvarchar[30] Name 
+    number Price 
+    nvarchar[20] ProductType
     FichTecNo FichTecNo
-    string Descricao
-    string Genero
-    float stock 
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    StockNo stockNo
+    number stock 
     string unidadeStock
-    string fornecedor 
+}
+
+class ProdutoOrdermFabrico {
+    ProductNo ProductNo 
+    FichaTecnicaNo FichaTecnicaNo
+    ManufacturingNo ManufacturingNo
 }
 
 /'
@@ -80,10 +91,12 @@ class FichaTecnica {
     FichTecNo FichTecNo
     FuncNo TecnicoResp 
     OpNo Operacoes
-    string Tamanho
-    float Peso
-    float Perdas
-    string Obs
+    ProductNo Materiais
+    nvarchar[5] Tamanho
+    number Peso
+    number Perdas
+    nvarchar[30] cor
+    nvarchar[250] Obs
 }
 
 /'
@@ -93,25 +106,22 @@ Ver se apenas um subContratado pode fazer uma e so uma operação
 class Operacao {
     OpNo OpNo 
     Type type 
-    string Name 
-    string Obs
-    float percentagem
-    sfloat perdas 
-    string unidadePerdas
+    nvarchar[30] Name 
+    nvarchar[250] Obs
 }
 
 /'
-Se a fabrica embia materiais para eles, 
-deve ter um campo para isso.
+ExpectedTime, acho que é o unico que não é preciso
 '/
 class SubContratado {
     SubContratado SubContratado
-    string produtoDesenvolver
-    string fornecedor 
-    Date duracao
-    string Obs
-    string preco
-    float quantidadeDesenvolvida
+    FornNo codForn 
+    nvarchar[50] name
+    PhoneNumber PhoneNumber
+    char[50] email
+    nvarchar[150] address
+    number price 
+    dateTime expectedTime 
 }
 
 
@@ -121,7 +131,8 @@ class SubContratado {
 operacao'/
 class Departamento {
     DeptNo DeptNo 
-    string Name 
+    nvarchar[30] Name
+    FuncNo SupVisNo 
 }
 
 /'
@@ -129,56 +140,58 @@ Funcionario da fabrica, que faz parte de um setor
 '/
 class Funcionario {
     FuncNo FuncNo
-    string DeptNo 
-    string Fname 
-    string Lname 
+    DeptNo DeptNo 
+    nvarchar[20] Fname
+    nvarchar[20] Lname
     Sex Sex
-    string Position
-    float Salary
-    number PhoneNumber 
-    string Email 
-    string Address
+    nvarchar[25] Position
+    number Salary
+    PhoneNumber PhoneNumber 
+    char[50] email
+    nvarchar[150] Address
     date DOB
 }
 
 class Cliente {
     ClientNo ClientNo
-    string Fname
-    string Lname
+    nvarchar[20] Fname
+    nvarchar[20] Lname
     Sex Sex
     number NIF 
-    number PhoneNumber 
-    string Email
-    string Address 
+    PhoneNumber PhoneNumber 
+    char[50] email
+    nvarchar[150] Address 
     date DOB 
-    string Type  
+    nvarchar[11] Type  
 }
 
 /'
 Relacionamento dos Funcionarios
 '/
-Funcionario }|--|| Departamento: Possui
+Funcionario }|--o| Departamento: Possui
 Funcionario ||--o{ Departamento: SuperVisiona 
 
 /'
 Relacionamento das Operacoes Interna
 '/
-Operacao ||--o| Departamento: Realiza(da)
-Operacao |o--o{ SubContratado
+Operacao }|--o| Departamento: Realiza(da)
+
 /'
 Relacionamento Ficha Tecnica
 '/
-FichaTecnica }|--|{ Operacao
+FichaTecnica }o--|{ Operacao
+FichaTecnica }o--|{ Produto: Utiliza(do)
 
 /'
 Relacionamentos do Produto
 '/
-Produto ||--|| FichaTecnica: Possui
-Produto }o---o{ OrdemFabrico
+Produto |o--o{ FichaTecnica: Possui
+Produto }o--o{ OrdemFabrico
 
 /'
 Relacionamento Ordem Fabrico
 '/
-Cliente ||--o{ OrdemFabrico: Contrata
+OrdemFabrico }o--o| Cliente: Contrata
+OrdemFabrico }o--o{ SubContratado
 
 @enduml

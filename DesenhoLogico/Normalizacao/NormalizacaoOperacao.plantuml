@@ -1,0 +1,80 @@
+@startuml tableBD
+
+class Operacao {
+    string OpNo_PK
+    string Name 
+    string TypeEnum
+    int totProduzido
+    string unidadeProd
+    int totPerdas
+    string unidadePerdas
+}
+
+class Produto {
+    string codProd_PK
+    stirnf dadosProduto
+}
+
+class OperacaoProduto {
+    string OpNo_PK
+    string codProd_PK
+    float quantidadeProduzida
+    string unidade 
+}
+
+/'
+Relacionamento OperacaoProduto
+'/
+Operacao ||--|{ OperacaoProduto
+Produto ||--o{ OperacaoProduto
+
+class Perdas {
+    string codPerdas_PK
+    string dadosPerda
+}
+
+class OperacaoProdutoPerdas {
+    string OpNo_PK
+    string codProd_PK
+    string codPerdas_PK
+}
+
+/'
+Relacionamento OperacaoProdutoPerdas
+'/
+Perdas ||--o{ OperacaoProdutoPerdas
+OperacaoProduto ||--o{ OperacaoProdutoPerdas
+
+class OperacaoSubContrada {
+    string codOpSub_PK
+    string name
+    string codForn_FK
+}
+
+class Fornecedor {
+    string codForn_PK
+    string nameFornecedor
+    string email
+    int numTelefone
+}
+
+class SubContratadoFornecedor {
+    string codOpSub_PK
+    string codForn_PK
+    float preco
+}
+
+/'
+Relacionamento SubContratadoFornecedor
+'/
+OperacaoSubContrada ||--|{ SubContratadoFornecedor
+Fornecedor }|--o{ SubContratadoFornecedor
+
+class SubContratadaOpercao {
+    string codOpSub_PK
+    string OpNo_P
+}
+
+Operacao ||--o{ SubContratadaOpercao
+OperacaoSubContrada }|--o{ SubContratadaOpercao
+@enduml
