@@ -1,0 +1,25 @@
+@startuml tableBD
+
+class SubContratado {
+    SubContratado SubContratado
+    number price 
+    dateTime expectedTime 
+}
+
+class subContratoFornecedor {
+    SubContratado SubContratado
+    FornNo codForn
+}
+
+class Fornecedor {
+    FornNo codForn 
+    nvarchar[50] name
+    PhoneNumber PhoneNumber
+    char[50] email
+    nvarchar[150] address
+}
+
+SubContratado |o--|{ subContratoFornecedor
+Fornecedor ||--o{ subContratoFornecedor
+
+@enduml

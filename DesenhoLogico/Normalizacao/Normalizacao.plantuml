@@ -77,4 +77,5 @@ class SubContratadaOpercao {
 
 Operacao ||--o{ SubContratadaOpercao
 OperacaoSubContrada }|--o{ SubContratadaOpercao
+
 @enduml

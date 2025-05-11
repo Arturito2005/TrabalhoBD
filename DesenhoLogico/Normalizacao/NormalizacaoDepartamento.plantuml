@@ -1,0 +1,24 @@
+@startuml tableBD
+
+class Operacao {
+    OpNo OpNo 
+    Type type 
+    nvarchar[30] Name 
+    nvarchar[250] Obs
+}
+
+class Departamento {
+    DeptNo DeptNo 
+    nvarchar[30] Name
+    FuncNo SupVisNo 
+}
+
+class OperacaoDepartamento {
+    DeptNo DeptNo
+    OpNo OpNo
+}
+
+Operacao ||--o| OperacaoDepartamento
+Departamento ||--|{ OperacaoDepartamento
+
+@end
