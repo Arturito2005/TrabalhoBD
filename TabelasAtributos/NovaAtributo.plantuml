@@ -6,23 +6,7 @@
 '/
 
 class OrdemFabrico {
-    ManufacturingNo ManufacturingNo
-    
-    int quantidadeFabricaProduto
-    int DiscardedAmountProduto
-    number ProductionCostProduto
-    number percentagemPerda
-    
-    int quantidadeSubContrato
-    int DiscardedAmountSubContrato
-    number CustoTotalSubContrato
-    number percentagemPerda
-    
-    number CustoTotalProduto
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
-    
+    ManufacturingNo ManufacturingNo    
     nvarchar[9] Status 
     DateTime CreationDate
     DateTime StarDate
@@ -32,6 +16,31 @@ class OrdemFabrico {
     number CostCharged
 }   
 
+class LinhasOrdermFabrico {
+    LinhaNo LinhaNo
+    number CustoProducaoProduto
+    int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+    number percentagemPerda
+}
+
+class SubContratadosLinha {
+    LinhaSub linhaSub
+    int quantidadeSubContrato
+    int DiscardedAmountSubContrato
+    number CustoTotalSubContrato
+    number percentagemPerda
+}
+
+/'
+Relacionamento LinhasOrder 
+O produto é que nao tenho a certeza
+'/
+SubContratado |o--o{ SubContratadosLinha
+LinhasOrdermFabrico |o--o{ SubContratadosLinha
+LinhasOrdermFabrico ||--o{ FichaTecnica
+LinhasOrdermFabrico }o--|| Produto
 /'
 O stock é quantidade que tem de Produto
 O fornecedor vai ter os campos da tabela e o Produto 
@@ -61,13 +70,6 @@ class Stock {
     StockNo stockNo
     number stock 
     string unidadeStock
-}
-
-class Perda {
-    PerdaNo perdaNo 
-    nvarchar[50] name 
-    number totalPerda
-    nvarchar[5] unidade
 }
 
 /'
@@ -183,8 +185,7 @@ Operacao }o--|| Produto: Produto Final
 Relacionamento Ficha Tecnica
 '/
 FichaTecnica }o--|{ Operacao
-FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
-FichaTecnica }o--o{ OrdemFabrico
+FichaTecnica }o--|{ MateriaPrima: Utiliza(do)o
 FichaTecnica }o--|| Funcionario: ResponsavelFicha
 /'
 Relacionamentos do Produto
@@ -200,7 +201,5 @@ SubContratado }o-|| Fornecedor: Fornecedor
 Relacionamento Ordem Fabrico
 '/
 OrdemFabrico }o--o| Cliente: Contrata
-OrdemFabrico }o--o{ SubContratado
-OrdemFabrico ||--o{ Perda
-
+OrdemFabrico ||--|{ LinhasOrdermFabrico
 @enduml

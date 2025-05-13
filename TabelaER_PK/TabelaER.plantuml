@@ -7,29 +7,6 @@
 
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    
-    int quantidadeFabricaProduto
-    int DiscardedAmountProduto
-    number ProductionCostProduto
-    number percentagemPerda
-    
-    int quantidadeSubContrato
-    int DiscardedAmountSubContrato
-    number CustoTotalSubContrato
-    number percentagemPerda
-    
-    number CustoTotalProduto
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
-    
-    nvarchar[9] Status 
-    DateTime CreationDate
-    DateTime StarDate
-    DateTime EndDate
-    number Priority
-    nvarchar[250] Obs
-    number CostCharged
 }   
 
 /'
@@ -44,30 +21,18 @@ ProductionType --> Acabado ou SemiAcabado
 '/
 class Produto {
     ProductNo ProductNo
-    nvarchar[30] Name 
-    number PriceUnitario 
-    nvarchar[20] ProductType
-    nvarchar[20] ProductionType
-    nvarchar[250] Descricao
-    nvarchar[9] Genero
 }
 
 class MateriaPrima {
     MateriaNo materiaNo
-    nvarchar[30] Name 
 }
 
 class Stock {
     StockNo stockNo
-    number stock 
-    string unidadeStock
 }
 
 class Perda {
     PerdaNo perdaNo 
-    nvarchar[50] name 
-    number totalPerda
-    nvarchar[5] unidade
 }
 
 /'
@@ -77,11 +42,6 @@ final
 '/
 class FichaTecnica {
     FichTecNo FichTecNo
-    number quantidadeNecessariaEsperada
-    nvarchar[5] Tamanho
-    number Peso
-    nvarchar[30] cor
-    nvarchar[250] Obs
 }
 
 /'
@@ -90,15 +50,6 @@ Ver se apenas um subContratado pode fazer uma e so uma operação
 '/
 class Operacao {
     OpNo OpNo 
-    Type type 
-    nvarchar[30] Name 
-    nvarchar[250] Obs
-    
-    number quantidadeMaterial
-    nvarchar[5] unidade
-
-    number quantidadeProduzida
-    nvarchar[5] unidade
 }
 
 /'
@@ -110,16 +61,10 @@ O productNo seria os materias que enviamos
 '/
 class SubContratado {
     SubContratado SubContratado
-    number price 
-    dateTime expectedTime 
 }
 
 class Fornecedor {
     FornNo codForn 
-    nvarchar[50] name
-    PhoneNumber PhoneNumber
-    char[50] email
-    nvarchar[150] address
 }
 
 /'Extras se quissermos complicar'/
@@ -128,7 +73,6 @@ class Fornecedor {
 operacao'/
 class Departamento {
     DeptNo DeptNo 
-    nvarchar[30] Name
 }
 
 /'
@@ -136,28 +80,10 @@ Funcionario da fabrica, que faz parte de um setor
 '/
 class Funcionario {
     FuncNo FuncNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    nvarchar[25] Position
-    number Salary
-    PhoneNumber PhoneNumber 
-    char[50] email
-    nvarchar[150] Address
-    date DOB
 }
 
 class Cliente {
     ClientNo ClientNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    number NIF 
-    PhoneNumber PhoneNumber 
-    char[50] email
-    nvarchar[150] Address 
-    date DOB
-    nvarchar[11] Type
 }
 
 /'
@@ -190,6 +116,15 @@ FichaTecnica }o--|| Funcionario: ResponsavelFicha
 Relacionamentos do Produto
 '/
 Produto ||--|| FichaTecnica: Produto Final
+
+
+/'
+Relacionamento de MateriaisSubContratados
+'/
+
+MateriaPrima ||--o{ MateriaisSubContrato: Enviado
+SubContratado ||--|{ MateriaisSubContrato: Necessita
+Produto ||--o{ MateriaisSubContrato: Recebido
 
 /'
 Relacionamento do Fornecedor

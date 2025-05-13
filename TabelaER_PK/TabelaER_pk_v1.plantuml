@@ -4,6 +4,10 @@ class OrdemFabrico {
     ManufacturingNo ManufacturingNo
 }   
 
+class MateriaPrima{
+    MateriaPrimaNo materiaPrimaNo
+}
+
 class Produto {
     ProductNo ProductNo
 }
@@ -42,18 +46,20 @@ Funcionario ||--o{ Departamento: SuperVisiona
 Relacionamento das Operacoes Interna
 '/
 Operacao }|--o| Departamento: Realiza(da)
+Operacao }o--|{ MateriaPrima: Materiais Utilizados
+Operacao }o--|| Produto: Produto Final
 
 /'
 Relacionamento Ficha Tecnica
 '/
 FichaTecnica }o--|{ Operacao
-FichaTecnica }o--|{ Produto: Utiliza(do)
-
+FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
+FichaTecnica }o--o{ OrdemFabrico
+FichaTecnica }o--|| Funcionario: ResponsavelFicha
 /'
 Relacionamentos do Produto
 '/
-Produto |o--o{ FichaTecnica: Possui
-Produto }o--o{ OrdemFabrico
+Produto ||--|| FichaTecnica: Produto Final
 
 /'
 Relacionamento Ordem Fabrico
