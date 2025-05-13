@@ -1,7 +1,7 @@
 @startuml tableBD
 
 /'
-!Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
+!Ligação da ORdem de Fabrico e Artigo mal, o que liga é a ficha Tecnica
 '/
 /'
 Falta SubContratados, SubContratados
@@ -20,60 +20,68 @@ Departamento com OperaçãoInterna
 FichaTecnica com Operacao
 
 Composições:
-Produto com Ordem de fabrico
+Artigo com Ordem de fabrico
 Cliente com Ordem de fabrico
-Produto com Ficha Tecnica
+Artigo com Ficha Tecnica
 OperacaoSubContratada com Operacao
 OperacaoInterna com Operacao
 '/
 
 /'
-Define os Produto a fabricar,
+Define os Artigo a fabricar,
 Quantidades necessárias
 Prazos de conclusão
 
 int ExpectedQuantity
 int MadeAmount
-int DiscardedAmount (Este 3 atributos diz respeito a quantidade produzida por produto)
+int DiscardedAmount (Este 3 atributos diz respeito a quantidade produzida por Artigo)
 
 Ver se a quantidade do subContrato está vem, ou então não.
 '/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    OpNo SubContratados
     ProductNo ProductNo
+    FichaTecnicaNo FichatTecnincaNo
     int quantidadeFabrica
+    int DiscardedAmount
+    number ProductionCost
+    
+    OpNo SubContratados
     int quantidadeSubContrato
+    int DiscardedAmount
+    number CustoTotal
+
+    number CustoTotalProduto
     int ExpectedQuantity
     int MadeAmount
     int DiscardedAmount
     PerdaNo perdaNo 
     nvarchar[50] name 
     number percentagem 
-    number valorPerda
+    number totalPerda
     nvarchar[5] unidade
-    number ProductionCost
-    number CostCharged
     nvarchar[9] Status 
     DateTime CreationDate
     DateTime StarDate
     DateTime EndDate
     number Priority
     nvarchar[250] Obs
+    ClientNo cliente
+    number CostCharged
 }   
 
 /'
-O stock é quantidade que tem de produto
-O fornecedor vai ter os campos da tabela e o produto 
+O stock é quantidade que tem de Artigo
+O fornecedor vai ter os campos da tabela e o Artigo 
 pode ter varios
 
 Talvez haja uma tabela materiais que liga juntamente
-ao produto há tabela operação
+ao Artigo há tabela operação
 '/
-class Produto {
+class Artigo {
     ProductNo ProductNo
     nvarchar[30] Name 
-    number Price 
+    number PriceUnitario 
     nvarchar[20] ProductType
     FichTecNo FichTecNo
     nvarchar[250] Descricao
@@ -85,7 +93,7 @@ class Produto {
 
 /'
 Conjunto de operações necessarias para a produção
-de um produto, os materiais utilizados e o resultado 
+de um Artigo, os materiais utilizados e o resultado 
 final
 '/
 class FichaTecnica {
@@ -93,6 +101,8 @@ class FichaTecnica {
     FuncNo TecnicoResp 
     OpNo Operacoes
     ProductNo Materiais
+    number quantidadeNecessariaEsperada
+    ProductNo ProdutoFinal
     nvarchar[5] Tamanho
     number Peso
     nvarchar[30] cor
@@ -119,6 +129,10 @@ O productNo seria os materias que enviamos
 '/
 class SubContratado {
     SubContratado SubContratado
+    ArtigoNo artigosEnviados
+    number Quantidade
+    ArtigoNo artigoRecebido
+    number QuantidadeRecebido
     FornNo codForn 
     nvarchar[50] name
     PhoneNumber PhoneNumber
@@ -129,6 +143,8 @@ class SubContratado {
     ProductNo produtctNo 
 }
 
+SubContratado }o--|{ Artigo: Utiliza
+SubContratado }o---|| Artigo: Entrega
 
 /'Extras se quissermos complicar'/
 
@@ -166,8 +182,8 @@ class Cliente {
     PhoneNumber PhoneNumber 
     char[50] email
     nvarchar[150] Address 
-    date DOB 
-    nvarchar[11] Type  
+    date DOB
+    nvarchar[11] Type
 }
 
 /'
@@ -185,13 +201,13 @@ Operacao }|--o| Departamento: Realiza(da)
 Relacionamento Ficha Tecnica
 '/
 FichaTecnica }o--|{ Operacao
-FichaTecnica }o--|{ Produto: Utiliza(do)
+FichaTecnica }o--|{ Artigo: Utiliza(do)
 
 /'
-Relacionamentos do Produto
+Relacionamentos do Artigo
 '/
-Produto |o--o{ FichaTecnica: Possui
-Produto }o--o{ OrdemFabrico
+Artigo ||--|| FichaTecnica: Produto Final
+FichaTecnica }o--o{ OrdemFabrico
 
 /'
 Relacionamento Ordem Fabrico

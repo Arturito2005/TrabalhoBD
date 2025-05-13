@@ -1,81 +1,165 @@
 @startuml tableBD
+/'
+Validar se tem todos os dados
+'/
+
+class Funcionario {
+    FuncNo FuncNo
+    DeptNo DeptNo
+    nvarchar[20] Fname
+    nvarchar[20] Lname
+    Sex Sex
+    nvarchar[25] Position
+    number Salary
+    PhoneNumber PhoneNumber
+    char[50] email
+    nvarchar[150] Address
+    date DOB
+}
+
+class Departamento {
+    DeptNo DeptNo 
+    nvarchar[30] Name
+    FuncNo SupVisNo 
+}
+
+Funcionario }|--o| Departamento: Possui
+Funcionario ||--o{ Departamento: SuperVisiona 
 
 class Operacao {
-    string OpNo_PK
-    string Name 
-    string TypeEnum
-    int totProduzido
-    string unidadeProd
-    int totPerdas
-    string unidadePerdas
+    OpNo OpNo
+    Type type
+    nvarchar[30] Name
+    nvarchar[250] Obs
 }
+
+class OperacaoDepartamento {
+    DeptNo DeptNo
+    OpNo OpNo
+}
+
+Operacao ||--o| OperacaoDepartamento
+Departamento ||--|{ OperacaoDepartamento
 
 class Produto {
     string codProd_PK
-    stirnf dadosProduto
-}
-
-class OperacaoProduto {
-    string OpNo_PK
-    string codProd_PK
-    float quantidadeProduzida
-    string unidade 
-}
-
-/'
-Relacionamento OperacaoProduto
-'/
-Operacao ||--|{ OperacaoProduto
-Produto ||--o{ OperacaoProduto
-
-class Perdas {
-    string codPerdas_PK
-    string dadosPerda
-}
-
-class OperacaoProdutoPerdas {
-    string OpNo_PK
-    string codProd_PK
-    string codPerdas_PK
+    string Name
+    float Price
+    string ProducType 
+    string Descricao 
+    string codStock 
+    float quantidade 
+    string unidadeStock 
 }
 
 /'
-Relacionamento OperacaoProdutoPerdas
+Possui as etapas de operacoes, materiais utilizados
+e o resultado
 '/
-Perdas ||--o{ OperacaoProdutoPerdas
-OperacaoProduto ||--o{ OperacaoProdutoPerdas
+class FichaTecnica {
+    FichTecNo FichTecNo
+    FuncNo TecnicoResp 
+    OpNo Operacoes
+    ProductNo Materiais
+    nvarchar[5] Tamanho
+    number Peso
+    nvarchar[30] cor
+    nvarchar[250] Obs
+}
 
-class OperacaoSubContrada {
-    string codOpSub_PK
-    string name
-    string codForn_FK
+class FichaTecnicaOperacao {
+    FichTecNo FichTecNo
+    OpNo OpNo
+}
+
+FichaTecnica |o--|{ FichaTecnicaOperacao
+Operacao ||--o{ FichaTecnicaOperacao
+
+class ProdutoFichaTecnica {
+    string codProd_PK
+    string codFichaTecnica_PK
+}
+
+Produto |o--o{ ProdutoFichaTecnica: Possui
+FichaTecnica |o--o{ ProdutoFichaTecnica: Utiliza
+
+class SubContratado {
+    SubContratado SubContratado
+    number price 
+    dateTime expectedTime 
+}
+
+class subContratoFornecedor {
+    SubContratado SubContratado
+    FornNo codForn
 }
 
 class Fornecedor {
-    string codForn_PK
-    string nameFornecedor
-    string email
-    int numTelefone
+    FornNo codForn 
+    nvarchar[50] name
+    PhoneNumber PhoneNumber
+    char[50] email
+    nvarchar[150] address
 }
 
-class SubContratadoFornecedor {
-    string codOpSub_PK
-    string codForn_PK
-    float preco
+SubContratado |o--|{ subContratoFornecedor
+Fornecedor ||--o{ subContratoFornecedor
+
+class Cliente {
+    ClientNo ClientNo
+    nvarchar[20] Fname
+    nvarchar[20] Lname
+    Sex Sex
+    number NIF 
+    PhoneNumber PhoneNumber 
+    char[50] email
+    nvarchar[150] Address 
+    date DOB 
+    nvarchar[11] Type  
 }
 
-/'
-Relacionamento SubContratadoFornecedor
-'/
-OperacaoSubContrada ||--|{ SubContratadoFornecedor
-Fornecedor }|--o{ SubContratadoFornecedor
+class OrdemFabrico {
+    ManufactoringNo manufacotingNo
+    codLinha codLinha
+    number TotProductionCost
+    number TotCostCharged
+    nvarchar[9] status
+    Date CreationDate
+    Date StartDate
+    Date EndDate
+    number Priority
+    number TotDiscardedAmount 
+    number TotPercentagem 
+    navarchar[250] Obs    
+} 
 
-class SubContratadaOpercao {
-    string codOpSub_PK
-    string OpNo_P
+class LinhaOrdemFabrico {
+    CodLinha codLinha
+    ManufactoringNo manufacotingNo
+    ProductNo productNo
+    number ExpectedQuantity
+    number MadeAcount 
+    nvarchar[5] unidade
+    number ProductionCost 
+    number CostCharged
+    number CodPerdas 
+    nvarchar[30] name
+    nvarchar[20] type
+    number DiscardedAmount 
+    number Percentagem 
+    nvarchar[5] unidade
+}
+OrdemFabrico }o--o| Cliente: Contrata
+
+Produto ||--|{ LinhaOrdemFabrico
+OrdemFabrico ||--|{ LinhaOrdemFabrico
+
+class SubContratadoLinha {
+    CodLinha codLinha
+    OpNo SubContratado 
 }
 
-Operacao ||--o{ SubContratadaOpercao
-OperacaoSubContrada }|--o{ SubContratadaOpercao
+SubContratado |o--o{ SubContratadoLinha
+LinhaOrdemFabrico |o--o{ SubContratadoLinha
 
 @enduml

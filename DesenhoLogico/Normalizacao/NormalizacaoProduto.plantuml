@@ -1,6 +1,5 @@
 @startuml tableBD
 
-
 class Produto {
     string codProd_PK
     string Name
@@ -28,5 +27,8 @@ class ProdutoFichaTecnica {
     string codProd_PK
     string codFichaTecnica_PK
 }
+
+Produto |o--o{ ProdutoFichaTecnica: Possui
+FichaTecnica |o--o{ ProdutoFichaTecnica: Utiliza
 
 @enduml
