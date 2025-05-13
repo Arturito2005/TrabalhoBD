@@ -59,18 +59,17 @@ class Produto {
     nvarchar[20] ProductionType
     nvarchar[250] Descricao
     nvarchar[9] Genero
+    number stock 
+    string unidadeStock
 }
 
 class MateriaPrima {
     MateriaNo materiaNo
     nvarchar[30] Name 
-}
-
-class Stock {
-    StockNo stockNo
     number stock 
     string unidadeStock
 }
+
 
 /'
 Conjunto de operações necessarias para a produção
@@ -86,6 +85,13 @@ class FichaTecnica {
     nvarchar[250] Obs
 }
 
+class OperacaoFichaTecnica {
+    FichTecNo FichTecNo
+    OpNo OpNo
+}
+
+Operacao ||--o{ OperacaoFichaTecnica
+FichaTecnica ||--|{ OperacaoFichaTecnica
 /'
 Parceiro externo que pode desenvolver uma operação
 Ver se apenas um subContratado pode fazer uma e so uma operação
@@ -95,14 +101,27 @@ class Operacao {
     Type type 
     nvarchar[30] Name 
     nvarchar[250] Obs
-    
+}
+
+class OperacaoMaterial {
+    OpNo OpNo 
+    MatNo MatNo
     number quantidadeMaterial
     nvarchar[5] unidade
+}
 
+class OperacaoProdutoFinal {
+    OpNo OpNo 
+    ProdcutNo ProductNo
     number quantidadeProduzida
     nvarchar[5] unidade
 }
 
+Operacao ||--|{ OperacaoMaterial
+MateriaPrima |o--o{ OperacaoMaterial
+
+Operacao ||--|| OperacaoProdutoFinal
+Produto |o--o{ OperacaoProdutoFinal
 /'
 ExpectedTime, acho que é o unico que não é preciso
 
@@ -162,11 +181,6 @@ class Cliente {
     nvarchar[11] Type
 }
 
-/'
-Relacionamento do Stock
-'/
-Produto ||--|| Stock
-MateriaPrima ||--||Stock
 
 /'
 Relacionamento dos Funcionarios
@@ -178,14 +192,11 @@ Funcionario ||--o{ Departamento: SuperVisiona
 Relacionamento das Operacoes Interna
 '/
 Operacao }|--o| Departamento: Realiza(da)
-Operacao }o--|{ MateriaPrima: Materiais Utilizados
-Operacao }o--|| Produto: Produto Final
 
 /'
 Relacionamento Ficha Tecnica
 '/
-FichaTecnica }o--|{ Operacao
-FichaTecnica }o--|{ MateriaPrima: Utiliza(do)o
+/'FichaTecnica }o--|{ MateriaPrima: Utiliza(do)o'/
 FichaTecnica }o--|| Funcionario: ResponsavelFicha
 /'
 Relacionamentos do Produto

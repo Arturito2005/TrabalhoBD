@@ -5,24 +5,18 @@
 !Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
 '/
 
+/'Estes valores
+int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+são comuns para a ordem e subContratado'/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    
-    int quantidadeFabricaProduto
-    int DiscardedAmountProduto
-    number ProductionCostProduto
-    number percentagemPerda
-    
-    int quantidadeSubContrato
-    int DiscardedAmountSubContrato
-    number CustoTotalSubContrato
-    number percentagemPerda
-    
-    number CustoTotalProduto
+
     int ExpectedQuantity
     int MadeAmount
     int DiscardedAmount
-    
+
     nvarchar[9] Status 
     DateTime CreationDate
     DateTime StarDate
@@ -50,24 +44,15 @@ class Produto {
     nvarchar[20] ProductionType
     nvarchar[250] Descricao
     nvarchar[9] Genero
+    number stock 
+    string unidadeStock
 }
 
 class MateriaPrima {
     MateriaNo materiaNo
     nvarchar[30] Name 
-}
-
-class Stock {
-    StockNo stockNo
     number stock 
     string unidadeStock
-}
-
-class Perda {
-    PerdaNo perdaNo 
-    nvarchar[50] name 
-    number totalPerda
-    nvarchar[5] unidade
 }
 
 /'
@@ -93,12 +78,6 @@ class Operacao {
     Type type 
     nvarchar[30] Name 
     nvarchar[250] Obs
-    
-    number quantidadeMaterial
-    nvarchar[5] unidade
-
-    number quantidadeProduzida
-    nvarchar[5] unidade
 }
 
 /'
@@ -161,12 +140,6 @@ class Cliente {
 }
 
 /'
-Relacionamento do Stock
-'/
-Produto ||--|| Stock
-MateriaPrima ||--||Stock
-
-/'
 Relacionamento dos Funcionarios
 '/
 Funcionario }|--o| Departamento: Possui
@@ -183,7 +156,9 @@ Operacao }o--|| Produto: Produto Final
 Relacionamento Ficha Tecnica
 '/
 FichaTecnica }o--|{ Operacao
+/'
 FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
+'/
 FichaTecnica }o--o{ OrdemFabrico
 FichaTecnica }o--|| Funcionario: ResponsavelFicha
 /'
@@ -201,6 +176,5 @@ Relacionamento Ordem Fabrico
 '/
 OrdemFabrico }o--o| Cliente: Contrata
 OrdemFabrico }o--o{ SubContratado
-OrdemFabrico ||--o{ Perda
 
 @enduml
