@@ -1,0 +1,47 @@
+@startuml SubContatado Normalizado
+
+/'
+Maten os dados em todos as normalizacoes
+'/
+class Produto {
+    ProductNo ProductNo
+    nvarchar[30] Name 
+    number PriceUnitario 
+    nvarchar[20] ProductType
+    nvarchar[20] ProductionType
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    number stock 
+    string unidadeStock
+}
+
+class SubContratado {
+    SubContratoNo SubContratoNo
+    number TempoEstimado 
+    nvarchar[5] unidadeTempo
+    ProductNo ProductNo 
+    number QuantidadeProduzida
+    number QunatidadePerdida  
+}
+
+class MaterialEnviado {
+    SubContratoNo SubContratoNo 
+    MateriaNo materiaNo
+    number quantidadeEnviada
+}
+
+class MateriaPrima {
+    MateriaNo materiaNo
+    nvarchar[30] Name 
+    nvarchar[100] descricao
+    nvarchar[20] categoria
+    number stock 
+    string unidadeStock
+}
+
+/'Relacionamento SubContrato'/
+SubContratado }o--|| Produto: ProdutoFinal
+SubContratado ||--|{ MaterialEnviado: Material Enviado
+MateriaPrima ||--o{ MaterialEnviado
+
+@end

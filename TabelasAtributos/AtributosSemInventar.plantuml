@@ -94,64 +94,24 @@ class SubContratado {
     SubContratado SubContratado
     number price 
     dateTime expectedTime 
+    number quantidadeEnviada
+    number quantidadeProduzir
 }
 
-class Fornecedor {
-    FornNo codForn 
-    nvarchar[50] name
-    PhoneNumber PhoneNumber
-    char[50] email
-    nvarchar[150] address
-}
 
 /'Extras se quissermos complicar'/
 
 /'Setor da fabrica responsável por uma determinada
 operacao'/
-class Departamento {
-    DeptNo DeptNo 
-    nvarchar[30] Name
-}
-
-/'
-Funcionario da fabrica, que faz parte de um setor
-'/
-class Funcionario {
-    FuncNo FuncNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    nvarchar[25] Position
-    number Salary
-    PhoneNumber PhoneNumber 
-    char[50] email
-    nvarchar[150] Address
-    date DOB
-}
-
-class Cliente {
-    ClientNo ClientNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    number NIF 
-    PhoneNumber PhoneNumber 
-    char[50] email
-    nvarchar[150] Address 
-    date DOB
-    nvarchar[11] Type
-}
 
 /'
 Relacionamento dos Funcionarios
 '/
-Funcionario }|--o| Departamento: Possui
-Funcionario ||--o{ Departamento: SuperVisiona 
+ 
 
 /'
 Relacionamento das Operacoes Interna
 '/
-Operacao }|--o| Departamento: Realiza(da)
 Operacao }o--|{ MateriaPrima: Materiais Utilizados
 Operacao }o--|| Produto: Produto Final
 
@@ -163,21 +123,15 @@ FichaTecnica }o--|{ Operacao
 FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
 '/
 FichaTecnica }o--o{ OrdemFabrico
-FichaTecnica }o--|| Funcionario: ResponsavelFicha
+
 /'
 Relacionamentos do Produto
 '/
-Produto ||--|| FichaTecnica: Produto Final
-
-/'
-Relacionamento do Fornecedor
-'/
-SubContratado }o-|| Fornecedor: Fornecedor
+Produto ||--o{ FichaTecnica: Produto Final
 
 /'
 Relacionamento Ordem Fabrico
 '/
-OrdemFabrico }o--o| Cliente: Contrata
 OrdemFabrico }o--o{ SubContratado
 
 @enduml

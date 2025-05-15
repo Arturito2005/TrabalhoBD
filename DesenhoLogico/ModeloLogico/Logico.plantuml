@@ -3,6 +3,7 @@
 /'
 !Meter realções ternarias
 !Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
+? Um produto só pode ter uma fichaTecnica
 '/
 
 /'Estes valores
@@ -13,9 +14,18 @@ são comuns para a ordem e subContratado'/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
 
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
+    FichTecNo FichTecNo
+    ProductNo ProductNo
+    int QuantidadeEsperada
+    int QuantidadeProduzida
+    int QuantidadePerdia
+    nvarchar[5] unidadeProduto
+
+    SubContratadoNo SubContratadoNo
+    int QuantidadeEsperada
+    int QuantidadeProduzida
+    int QuantidadePerdia
+    nvarchar[5] unidadeSubContratado
 
     nvarchar[9] Status 
     DateTime CreationDate
@@ -48,21 +58,29 @@ class Produto {
     string unidadeStock
 }
 
+/'
+Meti campos que não estão no word
+categoria --> grupo da matéria-prima (ex: Químicos, Metais, Plásticos)
+posso meter o campos (preço unitario, depois na ligação da Operacao Materia Prima)
+'/
 class MateriaPrima {
     MateriaNo materiaNo
     nvarchar[30] Name 
+    nvarchar[150] Descrição
+    nvarchar[25] categoria
     number stock 
     string unidadeStock
 }
 
 /'
-Conjunto de operações necessarias para a produção
-de um Produto, os materiais utilizados e o resultado 
-final
+OpNo --> operação(ões) da ficha Tecnica
+ProductNo --> Código do produto final
 '/
 class FichaTecnica {
     FichTecNo FichTecNo
+    ProductNo codProdutoFinal
     number quantidadeNecessariaEsperada
+    OpNo OpNo
     number tempoEsperado
     nvarchar[5] Tamanho
     number Peso
@@ -71,87 +89,47 @@ class FichaTecnica {
 }
 
 /'
-Parceiro externo que pode desenvolver uma operação
-Ver se apenas um subContratado pode fazer uma e so uma operação
+MateriaNo --> É o id do(s) materiai(s) utilizados na operação
+ProductNo --> É o id do produto final, produzido
 '/
 class Operacao {
     OpNo OpNo 
-    Type type 
     nvarchar[30] Name 
     nvarchar[250] Obs
-    number quantidadeProduzida
-    number quantidadeMateria
+    ProductNo codProdutoFinal
+    number quantidadeEstimadaProduzida
+    MateriaNo codMaterial
+    number quantidadeEstimadaMateria
 }
 
 /'
-ExpectedTime, acho que é o unico que não é preciso
-
-O subContratado ele manda tudo, o que está bem, mal, etc.
-
-O productNo seria os materias que enviamos
+MateriaNo --> É o id do(s) materiai(s) a enviar ao subContratado
+ProductNo --> ´R o id do produto final, produzido
 '/
 class SubContratado {
     SubContratado SubContratado
     number price 
     dateTime expectedTime 
+    MateriaNo MateriaNo
+    number quantidadeEnviada
+    ProductNo ProductNo
+    number quantidadeProduzir
 }
 
-class Fornecedor {
-    FornNo codForn 
-    nvarchar[50] name
-    PhoneNumber PhoneNumber
-    char[50] email
-    nvarchar[150] address
-}
 
 /'Extras se quissermos complicar'/
 
 /'Setor da fabrica responsável por uma determinada
 operacao'/
-class Departamento {
-    DeptNo DeptNo 
-    nvarchar[30] Name
-}
-
-/'
-Funcionario da fabrica, que faz parte de um setor
-'/
-class Funcionario {
-    FuncNo FuncNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    nvarchar[25] Position
-    number Salary
-    PhoneNumber PhoneNumber 
-    char[50] email
-    nvarchar[150] Address
-    date DOB
-}
-
-class Cliente {
-    ClientNo ClientNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    number NIF 
-    PhoneNumber PhoneNumber 
-    char[50] email
-    nvarchar[150] Address 
-    date DOB
-    nvarchar[11] Type
-}
 
 /'
 Relacionamento dos Funcionarios
 '/
-Funcionario }|--o| Departamento: Possui
-Funcionario ||--o{ Departamento: SuperVisiona 
+ 
 
 /'
 Relacionamento das Operacoes Interna
 '/
-Operacao }|--o| Departamento: Realiza(da)
 Operacao }o--|{ MateriaPrima: Materiais Utilizados
 Operacao }o--|| Produto: Produto Final
 
@@ -163,21 +141,20 @@ FichaTecnica }o--|{ Operacao
 FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
 '/
 FichaTecnica }o--o{ OrdemFabrico
-FichaTecnica }o--|| Funcionario: ResponsavelFicha
+
 /'
 Relacionamentos do Produto
 '/
-Produto ||--|| FichaTecnica: Produto Final
-
-/'
-Relacionamento do Fornecedor
-'/
-SubContratado }o-|| Fornecedor: Fornecedor
+Produto ||--o{ FichaTecnica: Produto Final
 
 /'
 Relacionamento Ordem Fabrico
 '/
-OrdemFabrico }o--o| Cliente: Contrata
 OrdemFabrico }o--o{ SubContratado
 
+/'
+Relacionamento SubContrato
+'/
+SubContratado }o--|| Produto
+SubContratado }o-o{ MateriaPrima
 @enduml

@@ -1,165 +1,90 @@
-@startuml tableBD
-/'
-Validar se tem todos os dados
-'/
+@startuml Normalizacao
 
-class Funcionario {
-    FuncNo FuncNo
-    DeptNo DeptNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    nvarchar[25] Position
-    number Salary
-    PhoneNumber PhoneNumber
-    char[50] email
-    nvarchar[150] Address
-    date DOB
+class Produto {
+    ProductNo ProductNo
+    nvarchar[30] Name 
+    number PriceUnitario 
+    nvarchar[20] ProductType
+    nvarchar[20] ProductionType
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    number stock 
+    string unidadeStock
 }
 
-class Departamento {
-    DeptNo DeptNo 
-    nvarchar[30] Name
-    FuncNo SupVisNo 
+class MateriaPrima {
+    MateriaNo materiaNo
+    nvarchar[30] Name 
+    nvarchar[100] descricao
+    nvarchar[20] categoria
+    number stock 
+    string unidadeStock
 }
-
-Funcionario }|--o| Departamento: Possui
-Funcionario ||--o{ Departamento: SuperVisiona 
 
 class Operacao {
     OpNo OpNo
-    Type type
-    nvarchar[30] Name
+    nvarchar[30] Name 
     nvarchar[250] Obs
+    ProductNo ProductNo 
 }
 
-class OperacaoDepartamento {
-    DeptNo DeptNo
-    OpNo OpNo
+class MaterialUtilizado {
+    OpNo OpNo 
+    MateriaNo materiaNo
+    number quantidadeEstimadaMaterial
 }
 
-Operacao ||--o| OperacaoDepartamento
-Departamento ||--|{ OperacaoDepartamento
-
-class Produto {
-    string codProd_PK
-    string Name
-    float Price
-    string ProducType 
-    string Descricao 
-    string codStock 
-    float quantidade 
-    string unidadeStock 
+class SubContratado {
+    SubContratoNo SubContratoNo
+    number TempoEstimado 
+    nvarchar[5] unidadeTempo
+    ProductNo ProductNo 
+    number QuantidadeProduzida
+    number QunatidadePerdida  
 }
 
-/'
-Possui as etapas de operacoes, materiais utilizados
-e o resultado
-'/
+class MaterialEnviado {
+    SubContratoNo SubContratoNo 
+    MateriaNo materiaNo
+    number quantidadeEnviada
+}
+
 class FichaTecnica {
     FichTecNo FichTecNo
-    FuncNo TecnicoResp 
-    OpNo Operacoes
-    ProductNo Materiais
+    ProductNo ProdutoFinal
+    number quantidadeNecessariaEsperada
+    number tempoEsperado
     nvarchar[5] Tamanho
     number Peso
     nvarchar[30] cor
     nvarchar[250] Obs
 }
 
-class FichaTecnicaOperacao {
+class EtapaProducao {
     FichTecNo FichTecNo
     OpNo OpNo
+    number QuantidadeProduzida  
+    number TempoEstimado 
+    nvarchar[5] unidadeTempo
 }
 
-FichaTecnica |o--|{ FichaTecnicaOperacao
-Operacao ||--o{ FichaTecnicaOperacao
+/'
+Relacionamento da FichaTecnica
+'/
+FichaTecnica }o---|| Produto
+FichaTecnica ||--|{ EtapaProducao
+Operacao ||--o{ EtapaProducao
 
-class ProdutoFichaTecnica {
-    string codProd_PK
-    string codFichaTecnica_PK
-}
+/'
+Relacionamento Operacao
+'/
+Operacao }o---|| Produto: ProdutoFinal
+Operacao ||--|{ MaterialUtilizado: Material Enviado
+MateriaPrima ||---o{ MaterialUtilizado
 
-Produto |o--o{ ProdutoFichaTecnica: Possui
-FichaTecnica |o--o{ ProdutoFichaTecnica: Utiliza
+/'Relacionamento SubContrato'/
+SubContratado }o---|| Produto: ProdutoFinal
+SubContratado ||--|{ MaterialEnviado: Material Enviado
+MateriaPrima ||---o{ MaterialEnviado
 
-class SubContratado {
-    SubContratado SubContratado
-    number price 
-    dateTime expectedTime 
-}
-
-class subContratoFornecedor {
-    SubContratado SubContratado
-    FornNo codForn
-}
-
-class Fornecedor {
-    FornNo codForn 
-    nvarchar[50] name
-    PhoneNumber PhoneNumber
-    char[50] email
-    nvarchar[150] address
-}
-
-SubContratado |o--|{ subContratoFornecedor
-Fornecedor ||--o{ subContratoFornecedor
-
-class Cliente {
-    ClientNo ClientNo
-    nvarchar[20] Fname
-    nvarchar[20] Lname
-    Sex Sex
-    number NIF 
-    PhoneNumber PhoneNumber 
-    char[50] email
-    nvarchar[150] Address 
-    date DOB 
-    nvarchar[11] Type  
-}
-
-class OrdemFabrico {
-    ManufactoringNo manufacotingNo
-    codLinha codLinha
-    number TotProductionCost
-    number TotCostCharged
-    nvarchar[9] status
-    Date CreationDate
-    Date StartDate
-    Date EndDate
-    number Priority
-    number TotDiscardedAmount 
-    number TotPercentagem 
-    navarchar[250] Obs    
-} 
-
-class LinhaOrdemFabrico {
-    CodLinha codLinha
-    ManufactoringNo manufacotingNo
-    ProductNo productNo
-    number ExpectedQuantity
-    number MadeAcount 
-    nvarchar[5] unidade
-    number ProductionCost 
-    number CostCharged
-    number CodPerdas 
-    nvarchar[30] name
-    nvarchar[20] type
-    number DiscardedAmount 
-    number Percentagem 
-    nvarchar[5] unidade
-}
-OrdemFabrico }o--o| Cliente: Contrata
-
-Produto ||--|{ LinhaOrdemFabrico
-OrdemFabrico ||--|{ LinhaOrdemFabrico
-
-class SubContratadoLinha {
-    CodLinha codLinha
-    OpNo SubContratado 
-}
-
-SubContratado |o--o{ SubContratadoLinha
-LinhaOrdemFabrico |o--o{ SubContratadoLinha
-
-@enduml
+@end
