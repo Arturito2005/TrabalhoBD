@@ -14,11 +14,12 @@ class Produto {
 
 class Operacao {
     OpNo OpNo
+    nvarchar[30] Name 
+    nvarchar[250] Obs
     number TempoEstimado 
     nvarchar[5] unidadeTempo
     ProductNo ProductNo 
-    number QuantidadeProduzida
-    number QunatidadePerdida  
+    number QuantidadeProduzida  
 }
 
 class MaterialUtilizado {
