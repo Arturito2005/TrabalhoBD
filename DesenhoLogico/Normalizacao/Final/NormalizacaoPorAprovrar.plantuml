@@ -59,7 +59,7 @@ class FichaTecnica {
 class EtapaProducao {
     FichTecNo FichTecNo
     OpNo OpNo
-    number QuantidadeProduzida  
+    number QuantidadeEstimadaProduzida  
     number TempoEstimado 
     nvarchar[5] unidadeTempo
 }
@@ -84,7 +84,7 @@ class LinhaOrdemFabrico {
     nvarchar[5] unidade
 }
 
-class FichaTecnicaSubContratos {
+class EtapaProducaoExterna {
     FichTecNo FichTecNo
     SubContratadoNo SubContratadoNo
     number QuantidadeProduzida
@@ -118,9 +118,9 @@ Relacionamento OrdemFabrico
 '/
 OrdemFabrico ||--|{ LinhaOrdemFabrico
 
-FichaTecnicaSubContratos ||--o{ LinhaOrdemFabrico
-FichaTecnica ||--o{ FichaTecnicaSubContratos
+EtapaProducaoExterna ||--o{ FichaTecnica
+FichaTecnica ||--o{ LinhaOrdemFabrico
 
-SubContratado |o--o{ FichaTecnicaSubContratos
+SubContratado ||--o{ EtapaProducaoExterna
 
 @end

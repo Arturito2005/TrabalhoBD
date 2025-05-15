@@ -36,6 +36,8 @@ class MaterialUtilizado {
 
 class SubContratado {
     SubContratoNo SubContratoNo
+    nvarchar[30] name
+    nvarchar[120] Obs
     number TempoEstimado 
     nvarchar[5] unidadeTempo
     ProductNo ProductNo 
@@ -64,6 +66,15 @@ class EtapaProducao {
     FichTecNo FichTecNo
     OpNo OpNo
     number QuantidadeProduzida  
+    number TempoEstimado 
+    nvarchar[5] unidadeTempo
+}
+
+class FichaTecnicaSubContratos {
+    FichTecNo FichTecNo
+    SubContratadoNo SubContratadoNo
+    number QuantidadeProduzida
+    number QunatidadePerdida
     number TempoEstimado 
     nvarchar[5] unidadeTempo
 }

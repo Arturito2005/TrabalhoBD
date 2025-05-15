@@ -5,6 +5,11 @@
 !Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
 '/
 
+/'Estes valores
+int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+são comuns para a ordem e subContratado'/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
 }   
@@ -27,14 +32,6 @@ class MateriaPrima {
     MateriaNo materiaNo
 }
 
-class Stock {
-    StockNo stockNo
-}
-
-class Perda {
-    PerdaNo perdaNo 
-}
-
 /'
 Conjunto de operações necessarias para a produção
 de um Produto, os materiais utilizados e o resultado 
@@ -51,7 +48,6 @@ Ver se apenas um subContratado pode fazer uma e so uma operação
 class Operacao {
     OpNo OpNo 
 }
-
 /'
 ExpectedTime, acho que é o unico que não é preciso
 
@@ -63,45 +59,20 @@ class SubContratado {
     SubContratado SubContratado
 }
 
-class Fornecedor {
-    FornNo codForn 
-}
 
 /'Extras se quissermos complicar'/
 
 /'Setor da fabrica responsável por uma determinada
 operacao'/
-class Departamento {
-    DeptNo DeptNo 
-}
-
-/'
-Funcionario da fabrica, que faz parte de um setor
-'/
-class Funcionario {
-    FuncNo FuncNo
-}
-
-class Cliente {
-    ClientNo ClientNo
-}
-
-/'
-Relacionamento do Stock
-'/
-Produto ||--|| Stock
-MateriaPrima ||--||Stock
 
 /'
 Relacionamento dos Funcionarios
 '/
-Funcionario }|--o| Departamento: Possui
-Funcionario ||--o{ Departamento: SuperVisiona 
+ 
 
 /'
 Relacionamento das Operacoes Interna
 '/
-Operacao }|--o| Departamento: Realiza(da)
 Operacao }o--|{ MateriaPrima: Materiais Utilizados
 Operacao }o--|| Produto: Produto Final
 
@@ -109,33 +80,19 @@ Operacao }o--|| Produto: Produto Final
 Relacionamento Ficha Tecnica
 '/
 FichaTecnica }o--|{ Operacao
+/'
 FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
+'/
 FichaTecnica }o--o{ OrdemFabrico
-FichaTecnica }o--|| Funcionario: ResponsavelFicha
+
 /'
 Relacionamentos do Produto
 '/
-Produto ||--|| FichaTecnica: Produto Final
-
-
-/'
-Relacionamento de MateriaisSubContratados
-'/
-
-MateriaPrima ||--o{ MateriaisSubContrato: Enviado
-SubContratado ||--|{ MateriaisSubContrato: Necessita
-Produto ||--o{ MateriaisSubContrato: Recebido
-
-/'
-Relacionamento do Fornecedor
-'/
-SubContratado }o-|| Fornecedor: Fornecedor
+Produto ||--o{ FichaTecnica: Produto Final
 
 /'
 Relacionamento Ordem Fabrico
 '/
-OrdemFabrico }o--o| Cliente: Contrata
 OrdemFabrico }o--o{ SubContratado
-OrdemFabrico ||--o{ Perda
 
 @enduml
