@@ -1,0 +1,47 @@
+@startuml tableBD
+
+
+class OrdemFabrico {
+}   
+
+class Produto {
+}
+
+class MateriaPrima {
+}
+
+class FichaTecnica {
+}
+
+class Operacao {
+}
+
+class SubContratado {
+}
+
+/'
+Relacionamento das Operacoes Interna
+'/
+Operacao }o--|{ MateriaPrima: Materiais Utilizados
+Operacao }o--|| Produto: Produto Final
+
+/'
+Relacionamento Ficha Tecnica
+'/
+FichaTecnica }o--|{ Operacao
+/'
+FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
+'/
+FichaTecnica }o--o{ OrdemFabrico
+
+/'
+Relacionamentos do Produto
+'/
+Produto ||--o{ FichaTecnica: Produto Final
+
+/'
+Relacionamento Ordem Fabrico
+'/
+OrdemFabrico }o--o{ SubContratado
+
+@enduml

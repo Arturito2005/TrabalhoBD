@@ -5,18 +5,12 @@
 !Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
 '/
 
-/'Estes valores
-int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
-são comuns para a ordem e subContratado'/
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-
     int ExpectedQuantity
     int MadeAmount
     int DiscardedAmount
-
+    number tempoEsperado
     nvarchar[9] Status 
     DateTime CreationDate
     DateTime StarDate
@@ -26,16 +20,6 @@ class OrdemFabrico {
     number CostCharged
 }   
 
-/'
-O stock é quantidade que tem de Produto
-O fornecedor vai ter os campos da tabela e o Produto 
-pode ter varios
-
-Talvez haja uma tabela materiais que liga juntamente
-ao Produto há tabela operação
-
-ProductionType --> Acabado ou SemiAcabado 
-'/
 class Produto {
     ProductNo ProductNo
     nvarchar[30] Name 
@@ -44,6 +28,8 @@ class Produto {
     nvarchar[20] ProductionType
     nvarchar[250] Descricao
     nvarchar[9] Genero
+    nvarchar[5] Tamanho
+    number Peso
     number stock 
     string unidadeStock
 }
@@ -51,78 +37,52 @@ class Produto {
 class MateriaPrima {
     MateriaNo materiaNo
     nvarchar[30] Name 
+    number PriceUnitario
     number stock 
     string unidadeStock
-}
-
-/'
-Conjunto de operações necessarias para a produção
-de um Produto, os materiais utilizados e o resultado 
-final
-'/
-class FichaTecnica {
-    FichTecNo FichTecNo
-    number quantidadeNecessariaEsperada
-    number tempoEsperado
-    nvarchar[5] Tamanho
-    number Peso
-    nvarchar[30] cor
     nvarchar[250] Obs
 }
 
-/'
-Parceiro externo que pode desenvolver uma operação
-Ver se apenas um subContratado pode fazer uma e so uma operação
-'/
+class FichaTecnica {
+    FichTecNo FichTecNo    
+    nvarchar[250] Obs
+}
+
 class Operacao {
     OpNo OpNo 
     Type type 
     nvarchar[30] Name 
     nvarchar[250] Obs
-    number quantidadeProduzida
-    number quantidadeMateria
 }
 
-/'
-ExpectedTime, acho que é o unico que não é preciso
-
-O subContratado ele manda tudo, o que está bem, mal, etc.
-
-O productNo seria os materias que enviamos
-'/
 class SubContratado {
     SubContratado SubContratado
     number price 
     dateTime expectedTime 
     number quantidadeEnviada
     number quantidadeProduzir
+    number quantidadePerdas
 }
 
-
-/'Extras se quissermos complicar'/
-
-/'Setor da fabrica responsável por uma determinada
-operacao'/
-
-/'
-Relacionamento dos Funcionarios
-'/
- 
+class EtapaProducao {
+    int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+    number quantidadeMateria
+}
 
 /'
-Relacionamento das Operacoes Interna
+Relacionamento Etapa Producao
 '/
-Operacao }o--|{ MateriaPrima: Materiais Utilizados
-Operacao }o--|| Produto: Produto Final
+EtapaProducao }|--|| FichaTecnica: Etapas Produção
+EtapaProducao }|--o{ Operacao: Operacoes Necessarias
+EtapaProducao }o--|{ MateriaPrima: Materiais Necessario
+EtapaProducao }o--|| MateriaPrima: Produto Entregue
 
-/'
-Relacionamento Ficha Tecnica
-'/
-FichaTecnica }o--|{ Operacao
 /'
 FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
 '/
-FichaTecnica }o--o{ OrdemFabrico
+FichaTecnica }|-o{ OrdemFabrico
 
 /'
 Relacionamentos do Produto
@@ -132,6 +92,11 @@ Produto ||--o{ FichaTecnica: Produto Final
 /'
 Relacionamento Ordem Fabrico
 '/
-OrdemFabrico }o--o{ SubContratado
+OrdemFabrico }o-o{ SubContratado
 
+/'
+Relacionamento SubContrato
+'/
+SubContratado }o--|| MateriaPrima: Produto Final
+SubContratado }o--|{ MateriaPrima: Materias Enviados
 @enduml

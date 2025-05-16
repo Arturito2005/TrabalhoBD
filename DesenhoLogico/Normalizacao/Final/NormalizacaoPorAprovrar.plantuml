@@ -117,8 +117,7 @@ MateriaPrima ||---o{ MaterialEnviado
 Relacionamento OrdemFabrico
 '/
 OrdemFabrico ||--|{ LinhaOrdemFabrico
-
-EtapaProducaoExterna ||--o{ FichaTecnica
+FichaTecnica ||--o{ EtapaProducaoExterna
 FichaTecnica ||--o{ LinhaOrdemFabrico
 
 SubContratado ||--o{ EtapaProducaoExterna
