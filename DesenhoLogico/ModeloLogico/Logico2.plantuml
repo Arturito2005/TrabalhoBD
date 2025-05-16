@@ -7,10 +7,6 @@
 
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
-    number tempoEsperado
     nvarchar[9] Status 
     DateTime CreationDate
     DateTime StarDate
@@ -20,43 +16,61 @@ class OrdemFabrico {
     number CostCharged
 }
 
-class SubContratado {
-    SubContratado SubContratado
-    number price 
-    dateTime expectedTime 
-    number quantidadeEnviada
-    MateriaNo MaterialSaida
+class LinhasFichaTecnicas {
+    ManufacturingNo ManufacturingNo
+    FichTecNo FichTecNo
     number quantidadeProduzir
     number quantidadePerdas
 }
 
+class LinhasSubContratos {
+    ManufacturingNo ManufacturingNo
+    SubContratado SubContratado
+    number quantidadeProduzir
+    number quantidadePerdas
+    dateTime expectedTime
+}
+
+class SubContratado {
+    SubContratado SubContratado
+    number price 
+    MaterialNo materialFinal
+}
+
+
 class FichaTecnica {
     FichTecNo FichTecNo
-    ProductNo ProductNo  
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
-    number quantidadeMateria  
+    ProductNo ProductNo 
+    number ProductionCost   
     nvarchar[250] Obs
 }
 
 class EtapaProducao {
     FichTecNo FichTecNo
+    OpNo OpNo
     MateriaNo MaterialSaida
+    int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
 }
 
-class Produto {
-    ProductNo ProductNo
+class Operacao {
+    OpNo OpNo 
     nvarchar[30] Name 
-    number PriceUnitario 
-    nvarchar[20] ProductType
-    nvarchar[20] ProductionType
-    nvarchar[250] Descricao
-    nvarchar[9] Genero
-    nvarchar[5] Tamanho
-    number Peso
-    number stock 
-    string unidadeStock
+    nvarchar[250] Obs
+}
+
+class OperacaoEtapa {
+    FichTecNo FichTecNo
+    OpNo OpNo
+    MaterialNo MaterialSaida
+}
+
+class ListaMaterial {
+    OpNo OpNo 
+    MaterialNo MaterialSaida
+    MaterialNo MaterialNo
+    number quantidadeMaterial
 }
 
 class MateriaPrima {
@@ -68,39 +82,69 @@ class MateriaPrima {
     nvarchar[250] Obs
 }
 
-class Operacao {
-    OpNo OpNo 
-    Type type 
-    nvarchar[30] Name 
-    nvarchar[250] Obs
+class MaterialEnviado {
+    SubContratadoNo SubContratado
+    MaterialNo MaterialNo
+    number quantidadeEnviada
 }
+
+
+class Produto {
+    ProductNo ProductNo
+    nvarchar[30] Name 
+    number PriceUnitario 
+    nvarchar[20] ProductType
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    nvarchar[5] Tamanho
+    number Peso
+    number stock 
+    string unidadeStock
+}
+
+
+
+/'
+Relacionamentos do Produto
+'/
+Produto ||-o{ FichaTecnica: Produto
 
 /'
 Relacionamento Etapa Producao
 '/
 EtapaProducao }|--|| FichaTecnica: Etapas Produção
-EtapaProducao }|--o{ Operacao: Operacoes Necessarias
-EtapaProducao }o--|{ MateriaPrima: Materiais Necessario
-EtapaProducao }o--|| MateriaPrima: Produto Entregue
+EtapaProducao }o-|| MateriaPrima: Produto Entregue
 
 /'
-FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
+Relacionamento Intermediario Operacao Etapa
 '/
-FichaTecnica }|-o{ OrdemFabrico
+OperacaoEtapa }o--|| Operacao: Operacoes Necessarias
+OperacaoEtapa }|--|| EtapaProducao: Operacoes Necessarias
 
 /'
-Relacionamentos do Produto
+Relacionamento Intermediario Operacao Etapa
 '/
-Produto ||--o{ FichaTecnica: Produto Final
+ListaMaterial }o--|| MateriaPrima: Materia Utilizado
+ListaMaterial }|--|| EtapaProducao: Materia Utilizado
 
 /'
-Relacionamento Ordem Fabrico
+Relacionamento Intermediario Material Enviado ao SubContrato
 '/
-OrdemFabrico }o-o{ SubContratado
+MaterialEnviado }|--|| SubContratado: Material Enviado
+MaterialEnviado }o--|| MateriaPrima: Material Enviado
 
 /'
 Relacionamento SubContrato
 '/
 SubContratado }o--|| MateriaPrima: Produto Final
-SubContratado }o--|{ MateriaPrima: Materias Enviados
+
+/'
+Relacionamento da Ordem de Fabrico
+'/
+LinhasFichaTecnicas }o-|| FichaTecnica
+LinhasFichaTecnicas }|--|| OrdemFabrico
+
+LinhasSubContratos }o--|| SubContratado
+LinhasSubContratos }|--|| OrdemFabrico
+
 @enduml
