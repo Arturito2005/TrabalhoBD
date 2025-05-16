@@ -18,7 +18,32 @@ class OrdemFabrico {
     number Priority
     nvarchar[250] Obs
     number CostCharged
-}   
+}
+
+class SubContratado {
+    SubContratado SubContratado
+    number price 
+    dateTime expectedTime 
+    number quantidadeEnviada
+    MateriaNo MaterialSaida
+    number quantidadeProduzir
+    number quantidadePerdas
+}
+
+class FichaTecnica {
+    FichTecNo FichTecNo
+    ProductNo ProductNo  
+    int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+    number quantidadeMateria  
+    nvarchar[250] Obs
+}
+
+class EtapaProducao {
+    FichTecNo FichTecNo
+    MateriaNo MaterialSaida
+}
 
 class Produto {
     ProductNo ProductNo
@@ -43,36 +68,11 @@ class MateriaPrima {
     nvarchar[250] Obs
 }
 
-class FichaTecnica {
-    FichTecNo FichTecNo
-    ProductNo ProductNo    
-    nvarchar[250] Obs
-}
-
 class Operacao {
     OpNo OpNo 
     Type type 
     nvarchar[30] Name 
     nvarchar[250] Obs
-}
-
-class SubContratado {
-    SubContratado SubContratado
-    number price 
-    dateTime expectedTime 
-    number quantidadeEnviada
-    number quantidadeProduzir
-    number quantidadePerdas
-}
-
-class EtapaProducao {
-    FichaTecNo FichaTecNo
-    OpNo OpNo
-    MateriaNo MaterialSaida 
-    int MadeAmount
-    int DiscardedAmountEsperado
-    MateriaNo MaterialEntrada 
-    number quantidadeMateria 
 }
 
 /'
