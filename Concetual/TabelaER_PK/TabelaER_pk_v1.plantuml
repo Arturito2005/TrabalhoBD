@@ -29,8 +29,7 @@ class SubContratado {
     SubContratado SubContratado
 }
 
-class EtapaProducao {
-}
+<> EtapaProducao
 
 /'
 Relacionamento Etapa Producao
