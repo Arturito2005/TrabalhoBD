@@ -44,7 +44,11 @@ class MateriaPrima {
 }
 
 class FichaTecnica {
-    FichTecNo FichTecNo    
+    FichTecNo FichTecNo  
+        int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
+    number quantidadeMateria  
     nvarchar[250] Obs
 }
 
@@ -65,10 +69,6 @@ class SubContratado {
 }
 
 class EtapaProducao {
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
-    number quantidadeMateria
 }
 
 /'
