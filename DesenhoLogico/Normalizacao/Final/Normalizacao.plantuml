@@ -1,10 +1,5 @@
 @startuml Normalizacao
 
-/'
-!Meter realções ternarias
-!Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
-'/
-
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
     nvarchar[9] Status 
@@ -26,6 +21,7 @@ class LinhasFichaTecnicas {
 class LinhasSubContratos {
     ManufacturingNo ManufacturingNo
     SubContratado SubContratado
+    number price 
     number quantidadeProduzir
     number quantidadePerdas
     dateTime expectedTime
@@ -33,7 +29,8 @@ class LinhasSubContratos {
 
 class SubContratado {
     SubContratado SubContratado
-    number price 
+    nvarchar[50] name
+    nvarchar[100] Obs
     MaterialNo materialFinal
 }
 
@@ -48,11 +45,12 @@ class FichaTecnica {
 class EtapaProducao {
     FichTecNo FichTecNo
     OpNo OpNo
-    MateriaNo MaterialSaida
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
+    MateriaNo MaterialFinal
+    time TempoEsperado
+    number QuantidadeProduzir
+    number DiscardedAmount
 }
+
 
 class Operacao {
     OpNo OpNo 
@@ -75,17 +73,6 @@ class MaterialEnviado {
     number quantidadeEnviada
 }
 
-class OperacaoMaterial {
-    OpNo OpNo
-    MaterialNo MatFinalNo
-}
-
-class MaterialNecessario {
-    MaterialNo MatFinalNo
-    MaterialNo MaterialNo 
-    number QuantidadeNecessaria
-    number PerdasEsperadas
-}
 
 class Produto {
     ProductNo ProductNo
@@ -100,26 +87,17 @@ class Produto {
     string unidadeStock
 }
 
-
-
 /'
 Relacionamentos do Produto
 '/
 Produto ||-o{ FichaTecnica: Produto
 
 /'
-Relacionamento Etapa Producao
-'/
-EtapaProducao }|--|| FichaTecnica: Etapas Produção
-
-/'
 Quantidade necessaria
 '/
-OperacaoMaterial }o--|| Operacao
-EtapaProducao ||--o{ OperacaoMaterial
-OperacaoMaterial ||--|{ MaterialNecessario
-OperacaoMaterial }o--|| MateriaPrima
-MaterialNecessario }o--|| MateriaPrima
+EtapaProducao }|--|| FichaTecnica
+EtapaProducao }o-|| Operacao
+EtapaProducao }o-|| MateriaPrima
 
 /'
 Relacionamento Intermediario Material Enviado ao SubContrato

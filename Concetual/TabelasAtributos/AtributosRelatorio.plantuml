@@ -1,9 +1,5 @@
 @startuml tableBD
 
-/'
-!Meter realções ternarias
-!Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
-'/
 
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
