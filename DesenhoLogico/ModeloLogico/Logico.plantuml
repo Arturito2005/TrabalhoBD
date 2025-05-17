@@ -39,7 +39,7 @@ class FichaTecnica {
 
 class EtapaProducao {
     FichTecNo FichTecNo
-    MateriaNo MaterialSaida
+    OpNo OpNo
 }
 
 class Produto {

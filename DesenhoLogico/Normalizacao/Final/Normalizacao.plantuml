@@ -1,101 +1,144 @@
 @startuml Normalizacao
 
-class Produto {
-    ProductNo ProductNo
-    nvarchar[30] Name 
-    number PriceUnitario 
-    nvarchar[20] ProductType
-    nvarchar[20] ProductionType
-    nvarchar[250] Descricao
-    nvarchar[9] Genero
-    number stock 
-    string unidadeStock
-}
+/'
+!Meter realções ternarias
+!Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
+'/
 
-class MateriaPrima {
-    MateriaNo materiaNo
-    nvarchar[30] Name 
-    nvarchar[100] descricao
-    nvarchar[20] categoria
-    number stock 
-    string unidadeStock
-}
-
-class Operacao {
-    OpNo OpNo
-    nvarchar[30] Name 
+class OrdemFabrico {
+    ManufacturingNo ManufacturingNo
+    nvarchar[9] Status 
+    DateTime CreationDate
+    DateTime StarDate
+    DateTime EndDate
+    number Priority
     nvarchar[250] Obs
-    ProductNo ProductNo 
+    number CostCharged
 }
 
-class MaterialUtilizado {
-    OpNo OpNo 
-    MateriaNo materiaNo
-    number quantidadeEstimadaMaterial
+class LinhasFichaTecnicas {
+    ManufacturingNo ManufacturingNo
+    FichTecNo FichTecNo
+    number quantidadeProduzir
+    number quantidadePerdas
+}
+
+class LinhasSubContratos {
+    ManufacturingNo ManufacturingNo
+    SubContratado SubContratado
+    number quantidadeProduzir
+    number quantidadePerdas
+    dateTime expectedTime
 }
 
 class SubContratado {
-    SubContratoNo SubContratoNo
-    nvarchar[30] name
-    nvarchar[120] Obs
-    number TempoEstimado 
-    nvarchar[5] unidadeTempo
-    ProductNo ProductNo 
-    number QuantidadeProduzida
-    number QunatidadePerdida  
+    SubContratado SubContratado
+    number price 
+    MaterialNo materialFinal
 }
 
-class MaterialEnviado {
-    SubContratoNo SubContratoNo 
-    MateriaNo materiaNo
-    number quantidadeEnviada
-}
 
 class FichaTecnica {
     FichTecNo FichTecNo
-    ProductNo ProdutoFinal
-    number quantidadeNecessariaEsperada
-    number tempoEsperado
-    nvarchar[5] Tamanho
-    number Peso
-    nvarchar[30] cor
+    ProductNo ProductNo 
+    number ProductionCost   
     nvarchar[250] Obs
 }
 
 class EtapaProducao {
     FichTecNo FichTecNo
     OpNo OpNo
-    number QuantidadeProduzida  
-    number TempoEstimado 
-    nvarchar[5] unidadeTempo
+    MateriaNo MaterialSaida
+    int ExpectedQuantity
+    int MadeAmount
+    int DiscardedAmount
 }
 
-class FichaTecnicaSubContratos {
-    FichTecNo FichTecNo
-    SubContratadoNo SubContratadoNo
-    number QuantidadeProduzida
-    number QunatidadePerdida
-    number TempoEstimado 
-    nvarchar[5] unidadeTempo
+class Operacao {
+    OpNo OpNo 
+    nvarchar[30] Name 
+    nvarchar[250] Obs
 }
 
-/'
-Relacionamento da FichaTecnica
-'/
-FichaTecnica }o---|| Produto
-FichaTecnica ||--|{ EtapaProducao
-Operacao ||--o{ EtapaProducao
+class MateriaPrima {
+    MateriaNo materiaNo
+    nvarchar[30] Name 
+    number PriceUnitario
+    number stock 
+    string unidadeStock
+    nvarchar[250] Obs
+}
+
+class MaterialEnviado {
+    SubContratadoNo SubContratado
+    MaterialNo MaterialNo
+    number quantidadeEnviada
+}
+
+class OperacaoMaterial {
+    OpNo OpNo
+    MaterialNo MatFinalNo
+}
+
+class MaterialNecessario {
+    MaterialNo MatFinalNo
+    MaterialNo MaterialNo 
+    number QuantidadeNecessaria
+    number PerdasEsperadas
+}
+
+class Produto {
+    ProductNo ProductNo
+    nvarchar[30] Name 
+    number PriceUnitario 
+    nvarchar[20] ProductType
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    nvarchar[5] Tamanho
+    number Peso
+    number stock 
+    string unidadeStock
+}
+
+
 
 /'
-Relacionamento Operacao
+Relacionamentos do Produto
 '/
-Operacao }o---|| Produto: ProdutoFinal
-Operacao ||--|{ MaterialUtilizado: Material Enviado
-MateriaPrima ||---o{ MaterialUtilizado
+Produto ||-o{ FichaTecnica: Produto
 
-/'Relacionamento SubContrato'/
-SubContratado }o---|| Produto: ProdutoFinal
-SubContratado ||--|{ MaterialEnviado: Material Enviado
-MateriaPrima ||---o{ MaterialEnviado
+/'
+Relacionamento Etapa Producao
+'/
+EtapaProducao }|--|| FichaTecnica: Etapas Produção
 
-@end
+/'
+Quantidade necessaria
+'/
+OperacaoMaterial }o--|| Operacao
+EtapaProducao ||--o{ OperacaoMaterial
+OperacaoMaterial ||--|{ MaterialNecessario
+OperacaoMaterial }o--|| MateriaPrima
+MaterialNecessario }o--|| MateriaPrima
+
+/'
+Relacionamento Intermediario Material Enviado ao SubContrato
+'/
+MaterialEnviado }|--|| SubContratado: Material Enviado
+MaterialEnviado }o--|| MateriaPrima: Material Enviado
+
+/'
+Relacionamento SubContrato
+'/
+SubContratado }o--|| MateriaPrima: Produto Final
+
+/'
+Relacionamento da Ordem de Fabrico
+'/
+LinhasFichaTecnicas }o-|| FichaTecnica
+LinhasFichaTecnicas }|--|| OrdemFabrico
+
+LinhasSubContratos }o--|| SubContratado
+LinhasSubContratos }|--|| OrdemFabrico
+
+@enduml
