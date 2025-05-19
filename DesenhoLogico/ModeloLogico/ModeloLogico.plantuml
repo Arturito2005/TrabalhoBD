@@ -36,7 +36,7 @@ class MateriaPrima {
 
 class FichaTecnica {
     FichTecNo FichTecNo 
-    number ProductionCost 
+    ProductNo ProductNo
     nvarchar[250] Obs
 }
 
@@ -53,23 +53,32 @@ class SubContratado {
 }
 
 class EtapaProducao {
-
+    FichTecNo FichTecNo
+    OpNo OpNo
+    MateriaNo materiaNo
 }
 
 class EtapasOrdem {
-    
+    FichTecNo FichTecNo
+    OpNo OpNo
+    SubContratado SubContratado
+    MateriaNo materiaNo
 }
 
 /'
 Relacionamento Etapa Producao
 '/
 EtapaProducao }|--|| FichaTecnica: Etapas Produção
-EtapaProducao }|--o{ Operacao: Operacoes Necessarias
+EtapaProducao }|--|| Operacao: Operacoes Necessarias
 EtapaProducao }o--|| MateriaPrima: Materiais Necessarios
 
-SubContratado ||--o{ EtapasOrdem
-EtapasOrdem ||--|{ EtapaProducao
+/'
+Etapas da Ordem
+'/
+SubContratado |o--o{ EtapasOrdem: Pode possuir 
+EtapasOrdem ||--|{ EtapaProducao: Possui
 OrdemFabrico ||--|{ EtapasOrdem: faz parte de
+
 
 /'
 Relacionamentos do Produto

@@ -1,9 +1,5 @@
-@startuml tableBD
+@startuml TabelaErPK
 
-/'
-!Meter realções ternarias
-!Ligação da ORdem de Fabrico e Produto mal, o que liga é a ficha Tecnica
-'/
 
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
@@ -18,11 +14,11 @@ class MateriaPrima {
 }
 
 class FichaTecnica {
-    FichTecNo FichTecNo  
+    FichTecNo FichTecNo 
 }
 
 class Operacao {
-    OpNo OpNo 
+    OpNo OpNo
 }
 
 class SubContratado {
@@ -31,32 +27,26 @@ class SubContratado {
 
 <> EtapaProducao
 
+<> EtapasOrdem
+
 /'
 Relacionamento Etapa Producao
 '/
 EtapaProducao }|--|| FichaTecnica: Etapas Produção
 EtapaProducao }|--o{ Operacao: Operacoes Necessarias
-EtapaProducao }o--|{ MateriaPrima: Materiais Necessario
-EtapaProducao }o--|| MateriaPrima: Produto Entregue
+EtapaProducao }o--|| MateriaPrima: Materiais Necessarios
 
 /'
-FichaTecnica }o--|{ MateriaPrima: Utiliza(do)
+Relacionamento da Etpas da Ordem
 '/
-FichaTecnica }|-o{ OrdemFabrico
+SubContratado ||--o{ EtapasOrdem: Pode possuir
+EtapasOrdem ||--|{ EtapaProducao: Possui
+OrdemFabrico ||--|{ EtapasOrdem: faz parte de
 
 /'
 Relacionamentos do Produto
 '/
-Produto ||--o{ FichaTecnica: Produto Final
+Produto ||--o{ FichaTecnica: descreve
 
-/'
-Relacionamento Ordem Fabrico
-'/
-OrdemFabrico }o-o{ SubContratado
 
-/'
-Relacionamento SubContrato
-'/
-SubContratado }o--|| MateriaPrima: Produto Final
-SubContratado }o--|{ MateriaPrima: Materias Enviados
 @enduml

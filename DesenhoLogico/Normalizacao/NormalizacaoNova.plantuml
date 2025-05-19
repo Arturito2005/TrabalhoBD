@@ -53,22 +53,13 @@ class Produto {
 }
 
 
-class EtapaProducaoInterna {
+class EtapaProducao {
     FichTecNo FichTecNo
     OpNo OpNo
     MateriaNo Material
     Type Type
 }
 
-/'
-A quantidade seria a quantidade enviada nos materias de entrda ou 
-a enviada nos materiais de Saida
-'/
-class EtapaProducaoExterna {
-    SubContratado SubContratado
-    MateriaNo Material 
-    Type Type
-}
 
 /'
 Verficiar se o MAterial e sempre um Material Final
@@ -95,22 +86,16 @@ class EtapaOrdemFabrico {
 /'
 Etapa Producao Interna
 '/
-EtapaProducaoInterna }o--|| FichaTecnica: Deifinida
-EtapaProducaoInterna }o--|| MateriaPrima: Utiliza(do)
-EtapaProducaoInterna }o--|| Operacao: Executa(da)
-
-/'
-Etapa de Produção Externa
-'/
-EtapaProducaoExterna }o--|| SubContratado: É executada por
-EtapaProducaoExterna }o--|| MateriaPrima: Utiliza(do)
+EtapaProducao }o--|| FichaTecnica: Deifinida
+EtapaProducao }o--|| MateriaPrima: Utiliza(do)
+EtapaProducao }o--|| Operacao: Executa(da)
 
 /'
 Etapas da Ordem de Fabrico
 '/
 EtapaOrdemFabrico }o--|| OrdemFabrico: faz parte de
-EtapaOrdemFabrico }o--|| EtapaProducaoInterna: inclui etapa interna
-EtapaOrdemFabrico }o--o| EtapaProducaoExterna: pode incluir etapas externa
+EtapaOrdemFabrico }o--|| EtapaProducao: inclui etapa interna
+EtapaOrdemFabrico }o--o| SubContratado: pode incluir subContratados
 
 FichaTecnica }o--|| Produto: descreve
 @end
