@@ -66,7 +66,6 @@ Relacionamento Etapa Producao
 '/
 EtapaProducao }|--|| FichaTecnica: Etapas Produção
 EtapaProducao }|--o{ Operacao: Operacoes Necessarias
-EtapaProducao }o--|{ MateriaPrima: Materiais Necessario
 EtapaProducao }o--|| MateriaPrima: Produto Entregue
 
 SubContratado ||--o{ EtapasOrdem
