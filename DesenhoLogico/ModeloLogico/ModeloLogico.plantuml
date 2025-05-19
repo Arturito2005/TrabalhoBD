@@ -1,0 +1,80 @@
+@startuml tableBD
+
+
+class OrdemFabrico {
+    ManufacturingNo ManufacturingNo
+    nvarchar[9] Status 
+    DateTime CreationDate
+    DateTime StarDate
+    DateTime EndDate
+    number Priority
+    nvarchar[250] Obs
+    number CostCharged
+}   
+
+class Produto {
+    ProductNo ProductNo
+    nvarchar[30] Name 
+    number PriceUnitario 
+    nvarchar[20] ProductType
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    nvarchar[5] Tamanho
+    number Peso
+    number stock 
+    string unidadeStock
+}
+
+class MateriaPrima {
+    MateriaNo materiaNo
+    nvarchar[30] Name
+    number PriceUnitario
+    number stock 
+    string unidadeStock
+    nvarchar[250] Obs
+}
+
+class FichaTecnica {
+    FichTecNo FichTecNo 
+    number ProductionCost 
+    nvarchar[250] Obs
+}
+
+class Operacao {
+    OpNo OpNo
+    nvarchar[30] Name 
+    nvarchar[250] Obs
+}
+
+class SubContratado {
+    SubContratado SubContratado
+    nvarchar[30] name
+    nvarchar[250]
+}
+
+class EtapaProducao {
+
+}
+
+class EtapasOrdem {
+    
+}
+
+/'
+Relacionamento Etapa Producao
+'/
+EtapaProducao }|--|| FichaTecnica: Etapas Produção
+EtapaProducao }|--o{ Operacao: Operacoes Necessarias
+EtapaProducao }o--|| MateriaPrima: Materiais Necessarios
+
+SubContratado ||--o{ EtapasOrdem
+EtapasOrdem ||--|{ EtapaProducao
+OrdemFabrico ||--|{ EtapasOrdem: faz parte de
+
+/'
+Relacionamentos do Produto
+'/
+Produto ||--o{ FichaTecnica: descreve
+
+
+@enduml
