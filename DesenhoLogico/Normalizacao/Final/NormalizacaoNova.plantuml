@@ -1,0 +1,116 @@
+@startuml teste 
+
+
+class OrdemFabrico {
+    ManufacturingNo ManufacturingNo
+    nvarchar[9] Status 
+    DateTime CreationDate
+    DateTime StarDate
+    DateTime EndDate
+    number Priority
+    nvarchar[250] Obs
+    number CostCharged
+}
+
+class MateriaPrima {
+    MateriaNo materiaNo
+    nvarchar[30] Name
+    number PriceUnitario
+    number stock 
+    string unidadeStock
+    nvarchar[250] Obs
+}
+
+class Operacao {
+    OpNo OpNo 
+    nvarchar[30] Name 
+    nvarchar[250] Obs
+}
+
+class SubContratado {
+    SubContratado SubContratado
+    nvarchar[50] name
+    nvarchar[100] Obs
+}
+
+class FichaTecnica {
+    FichTecNo FichTecNo
+    ProductNo ProductNo   
+    nvarchar[250] Obs
+}
+
+class Produto {
+    ProductNo ProductNo
+    nvarchar[30] Name 
+    number PriceUnitario 
+    nvarchar[20] ProductType
+    nvarchar[250] Descricao
+    nvarchar[9] Genero
+    nvarchar[5] Tamanho
+    number Peso
+    number stock 
+    string unidadeStock
+}
+
+
+class EtapaProducaoInterna {
+    FichTecNo FichTecNo
+    OpNo OpNo
+    MateriaNo Material
+    Type Type
+}
+
+/'
+A quantidade seria a quantidade enviada nos materias de entrda ou 
+a enviada nos materiais de Saida
+'/
+class EtapaProducaoExterna {
+    SubContratado SubContratado
+    MateriaNo Material 
+    Type Type
+}
+
+/'
+Verficiar se o MAterial e sempre um Material Final
+'/
+class EtapaOrdemFabrico {
+    ManufactoringNo ManufactoringNo
+    FichTecNo FichTecNo
+    OpNo OpNo
+    number quantidadeMat
+    number quantidadePerdas
+    SubContratado SubContratado
+    number quantidadeMat
+    number quantidadePerdas
+    number priceSubContratado
+    MateriaNo Material 
+    Type Type
+    number quantidadeTotal
+    number perdasTotais
+    number Prioridade
+    number Tempo
+    nvarchar[3] status
+}
+
+/'
+Etapa Producao Interna
+'/
+EtapaProducaoInterna }o--|| FichaTecnica: Deifinida
+EtapaProducaoInterna }o--|| MateriaPrima: Utiliza(do)
+EtapaProducaoInterna }o--|| Operacao: Executa(da)
+
+/'
+Etapa de Produção Externa
+'/
+EtapaProducaoExterna }o--|| SubContratado: É executada por
+EtapaProducaoExterna }o--|| MateriaPrima: Utiliza(do)
+
+/'
+Etapas da Ordem de Fabrico
+'/
+EtapaOrdemFabrico }o--|| OrdemFabrico
+EtapaOrdemFabrico }o--|| EtapaProducaoInterna
+EtapaOrdemFabrico }o--o| EtapaProducaoExterna
+
+FichaTecnica }o--|| Produto
+@end
