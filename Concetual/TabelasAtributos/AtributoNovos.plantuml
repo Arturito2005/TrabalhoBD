@@ -27,7 +27,7 @@ class Produto {
 
 class MateriaPrima {
     MateriaNo materiaNo
-    nvarchar[30] Name 
+    nvarchar[30] Name
     number PriceUnitario
     number stock 
     string unidadeStock
@@ -36,12 +36,7 @@ class MateriaPrima {
 
 class FichaTecnica {
     FichTecNo FichTecNo 
-    number ProductionCost
-    number tempoRealizacao                       
-    int ExpectedQuantity
-    int MadeAmount
-    int DiscardedAmount
-    number quantidadeMateria  
+    number ProductionCost 
     nvarchar[250] Obs
 }
 
