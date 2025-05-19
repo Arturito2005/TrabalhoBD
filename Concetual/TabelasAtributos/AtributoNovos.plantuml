@@ -59,18 +59,18 @@ class SubContratado {
 /'
 Relacionamento Etapa Producao
 '/
-EtapaProducao }|--|| FichaTecnica: Etapas Produção
-EtapaProducao }|--o{ Operacao: Operacoes Necessarias
-EtapaProducao }o--|| MateriaPrima: Produto Entregue
+EtapaProducao }|--|| FichaTecnica: definida_por
+EtapaProducao }|--o{ Operacao: faz_parte_de
+EtapaProducao }o--|| MateriaPrima: é_usada_em
 
-SubContratado ||--o{ EtapasOrdem
-EtapasOrdem ||--|{ EtapaProducao
-OrdemFabrico ||--|{ EtapasOrdem
+SubContratado ||--o{ EtapasOrdem: executa
+EtapasOrdem ||--|{ EtapaProducao: faz_parte_de
+OrdemFabrico ||--|{ EtapasOrdem: contém_etapas
 
 /'
 Relacionamentos do Produto
 '/
-Produto ||--o{ FichaTecnica: Produto Final
+Produto ||--o{ FichaTecnica: possui
 
 
 @enduml
