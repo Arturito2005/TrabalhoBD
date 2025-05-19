@@ -86,7 +86,7 @@ class EtapaOrdemFabrico {
 /'
 Etapa Producao Interna
 '/
-EtapaProducao }o--|| FichaTecnica: Deifinida
+EtapaProducao }|--|| FichaTecnica: Deifinida
 EtapaProducao }o--|| MateriaPrima: Utiliza(do)
 EtapaProducao }o--|| Operacao: Executa(da)
 
