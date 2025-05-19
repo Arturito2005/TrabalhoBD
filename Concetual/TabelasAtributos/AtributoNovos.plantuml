@@ -78,9 +78,4 @@ Relacionamentos do Produto
 Produto ||--o{ FichaTecnica: Produto Final
 
 
-/'
-Relacionamento SubContrato
-'/
-SubContratado }o--|| MateriaPrima: Produto Final
-SubContratado }o--|{ MateriaPrima: Materias Enviados
 @enduml

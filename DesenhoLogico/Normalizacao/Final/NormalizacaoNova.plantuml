@@ -108,8 +108,8 @@ EtapaProducaoExterna }o--|| MateriaPrima: Utiliza(do)
 /'
 Etapas da Ordem de Fabrico
 '/
-EtapaOrdemFabrico }o--|| OrdemFabrico
-EtapaOrdemFabrico }o--|| EtapaProducaoInterna
+EtapaOrdemFabrico }o--|| OrdemFabrico: faz parte de
+EtapaOrdemFabrico }o--|| EtapaProducaoInterna:
 EtapaOrdemFabrico }o--o| EtapaProducaoExterna
 
 FichaTecnica }o--|| Produto
