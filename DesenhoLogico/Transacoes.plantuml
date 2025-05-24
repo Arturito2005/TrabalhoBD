@@ -100,4 +100,61 @@ EtapaOrdemFabrico }o--|| EtapaProducao: inclui etapa interna
 EtapaOrdemFabrico }o--o| SubContratado: pode incluir subContratados
 
 FichaTecnica }o--|| Produto: descreve
-@end
+
+/'
+Listar Ordens em atraso com o respetivo tempo de atraso
+'/
+OrdemFabrico ---> OrdemFabrico: (a)
+
+/'
+Listar Operacoes Problematicas
+'/
+EtapaOrdemFabrico ---> EtapaProducao: (b)
+EtapaProducao ---> Operacao: (b)
+
+/'Custos Comparativos entre operação interna e externa'/
+OrdemFabrico ---> EtapaOrdemFabrico: (c)
+EtapaOrdemFabrico ---> SubContratado: (c)
+EtapaOrdemFabrico ---> EtapaProducao: (c)
+
+/'
+Consultar as Ordens de fabrico em curso com indicação do progresso
+'/
+OrdemFabrico ---> EtapaOrdemFabrico: (d)
+
+/'
+Relatorio de operacoes com perdas superiores a 15%
+'/
+EtapaOrdemFabrico ---> EtapaProducao: (e)
+EtapaProducao ---> Operacao: (e)
+
+/'
+Listar as Operacoes mais frequentemente subContratadas e respetivos custos
+'/
+EtapaOrdemFabrico ---> SubContratado: (f)
+
+/'
+Determinar o custo total de produção de uma ordem
+'/
+OrdemFabrico ---> EtapaOrdemFabrico: (g)
+EtapaOrdemFabrico ---> SubContratado: (g)
+EtapaOrdemFabrico ---> EtapaProducao: (g)
+EtapaProducao ---> MateriaPrima: (g)
+
+/'
+Consultar lista de operacoes pendentes para cada ordem, ordenadas por prioridade
+'/
+OrdemFabrico ---> EtapaOrdemFabrico: (h)
+
+/' 
+Estimar o tempo total necessários para concluir uma ordem, com base no tempo médio das operações
+'/
+OrdemFabrico ---> EtapaOrdemFabrico: (i)
+EtapaOrdemFabrico ---> EtapaProducao: (i)
+EtapaProducao ---> Operacao: (i)
+
+/'
+Calcular a eficiência média de produção por período
+'/
+OrdemFabrico ---> EtapaOrdemFabrico: (j)
+@enduml

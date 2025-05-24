@@ -1,0 +1,106 @@
+@startuml TabelaER_PK
+
+class OrdemFabrico {
+    ManufacturingNo ManufacturingNo
+}   
+
+class Produto {
+    ProductNo ProductNo
+}
+
+class MateriaPrima {
+    MateriaNo materiaNo
+}
+
+class FichaTecnica {
+    FichTecNo FichTecNo 
+}
+
+class Operacao {
+    OpNo OpNo
+}
+
+class SubContratado {
+    SubContratado SubContratado
+}
+
+<> EtapaProducao
+
+<> EtapasOrdem
+
+/'
+Relacionamento Etapa Producao
+'/
+EtapaProducao }|--|| FichaTecnica: Etapas Produção
+EtapaProducao }o--|| Operacao: Operacoes Necessarias
+EtapaProducao }o--|| MateriaPrima: Materiais Necessarios
+
+/'
+Relacionamento da Etpas da Ordem
+'/
+SubContratado ||--o{ EtapasOrdem: Pode possuir
+EtapasOrdem ||--|{ EtapaProducao: Possui
+OrdemFabrico ||--|{ EtapasOrdem: faz parte de
+
+/'
+Relacionamentos do Produto
+'/
+Produto ||--o{ FichaTecnica: descreve
+
+/'
+Listar Ordens em atraso com o respetivo tempo de atraso
+'/
+OrdemFabrico ---> OrdemFabrico: (a)
+
+/'
+Listar Operacoes Problematicas
+'/
+EtapasOrdem ---> EtapaProducao: (b)
+EtapaProducao ---> Operacao: (b)
+
+/'Custos Comparativos entre operação interna e externa'/
+OrdemFabrico ---> EtapasOrdem: (c)
+EtapasOrdem ---> SubContratado: (c)
+EtapasOrdem ---> EtapaProducao: (c)
+
+/'
+Consultar as Ordens de fabrico em curso com indicação do progresso
+'/
+OrdemFabrico ---> EtapasOrdem: (d)
+
+/'
+Relatorio de operacoes com perdas superiores a 15%
+'/
+EtapasOrdem ---> EtapaProducao: (e)
+EtapaProducao ---> Operacao: (e)
+
+/'
+Listar as Operacoes mais frequentemente subContratadas e respetivos custos
+'/
+EtapasOrdem ---> SubContratado: (f)
+
+/'
+Determinar o custo total de produção de uma ordem
+'/
+OrdemFabrico ---> EtapasOrdem: (g)
+EtapasOrdem ---> SubContratado: (g)
+EtapasOrdem ---> EtapaProducao: (g)
+EtapaProducao ---> MateriaPrima: (g)
+
+/'
+Consultar lista de operacoes pendentes para cada ordem, ordenadas por prioridade
+'/
+OrdemFabrico ---> EtapasOrdem: (h)
+
+/' 
+Estimar o tempo total necessários para concluir uma ordem, com base no tempo médio das operações
+'/
+OrdemFabrico ---> EtapasOrdem: (i)
+EtapasOrdem ---> EtapaProducao: (i)
+EtapaProducao ---> Operacao: (i)
+
+/'
+Calcular a eficiência média de produção por período
+'/
+OrdemFabrico ---> EtapasOrdem: (j)
+@enduml

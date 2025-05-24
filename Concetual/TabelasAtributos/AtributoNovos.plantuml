@@ -59,7 +59,7 @@ class SubContratado {
 Relacionamento Etapa Producao
 '/
 EtapaProducao }|--|| FichaTecnica: Etapas Produção
-EtapaProducao }|--o{ Operacao: Operacoes Necessarias
+EtapaProducao }o--|| Operacao: Operacoes Necessarias
 EtapaProducao }o--|| MateriaPrima: Materiais Necessarios
 
 SubContratado ||--o{ EtapasOrdem: Pode possuir

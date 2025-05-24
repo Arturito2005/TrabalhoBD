@@ -3,34 +3,36 @@
 
 class OrdemFabrico {
     ManufacturingNo ManufacturingNo
-    nvarchar[9] Status 
     DateTime CreationDate
     DateTime StarDate
     DateTime EndDate
-    number Priority
+    DateTime ExpectedEndDate
+    int TotTimeExpected 
+    int TotCostSubContract
+    int Priority
+    nvarchar[9] Status 
     nvarchar[250] Obs
-    number CostCharged
 }   
 
 class Produto {
     ProductNo ProductNo
     nvarchar[30] Name 
-    number PriceUnitario 
+    float PriceUn
     nvarchar[20] ProductType
-    nvarchar[250] Descricao
-    nvarchar[9] Genero
-    nvarchar[5] Tamanho
-    number Peso
-    number stock 
-    string unidadeStock
+    nvarchar[250] Description
+    nchar[1] Genero
+    nchar[5] Sizes
+    float Weight
+    int stock 
+    nvarchar[5] unityStock
 }
 
 class MateriaPrima {
     MateriaNo materiaNo
     nvarchar[30] Name
-    number PriceUnitario
-    number stock 
-    string unidadeStock
+    float PriceUn
+    int stock 
+    nchar[5] unityStock
     nvarchar[250] Obs
 }
 
@@ -56,20 +58,34 @@ class EtapaProducao {
     FichTecNo FichTecNo
     OpNo OpNo
     MateriaNo materiaNo
+    Type Type
 }
 
 class EtapasOrdem {
     FichTecNo FichTecNo
     OpNo OpNo
-    SubContratado SubContratado
+    int QuantityMaterialOp
+    int QuantityLost
+    SubContratado OpSubNo
+    int QuantityMaterialSub
+    int QuantityReceivedSub
+    int QuantityLost
+    float PriceSub
     MateriaNo materiaNo
+    Type Type
+    int TotQuantity 
+    int TotQuantityLost 
+    int Priority 
+    int TimeInMinutes 
+    nchar[1] Status
+    int Ordem
 }
 
 /'
 Relacionamento Etapa Producao
 '/
 EtapaProducao }|--|| FichaTecnica: Etapas Produção
-EtapaProducao }|--|| Operacao: Operacoes Necessarias
+EtapaProducao }o--|| Operacao: Operacoes Necessarias
 EtapaProducao }o--|| MateriaPrima: Materiais Necessarios
 
 /'
