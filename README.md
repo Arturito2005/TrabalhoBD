@@ -8,10 +8,16 @@ In summary, this project involved the creation of an SQL database designed to st
 
 For a more detailed explanation of everything we developed, please refer to the report file **"Relatorio_BD"**, which includes full documentation of our work as well as all the steps we followed in building the database.
 
-All the requirements and specifications for this project are available in the file **"TP - Normal - V1"**.
+---
+### 📁 Folder Structure
+- **Conceptual**: contains all the conceptual diagrams we created.  
+- **Logical Design**: contains our database's logical design, both before and after normalization.  
+- **ER Table**: contains our first Entity-Relationship (ER) diagram.  
+- **Backup.zip**: a backup of our database, which can be imported into your SQL Server Management Studio.  
+- **Relatorio_BD.pdf**: our project report, written in Portuguese.  
+- **TP - Normal - V1 (1).pdf**: the original assignment brief for the practical project.
 
 ---
-
 ### 🛠️ Languages and Tools
 
 #### 💻 Languages
@@ -24,9 +30,18 @@ All the requirements and specifications for this project are available in the fi
 ## Português
 
 ### 📌 Introdução
-Este repositorio, possui o trabalho que realizei para a UC Base de dados (BD).
+Este repositorio, possui o trabalho que realizei para a UC "Base de dados" (BD).
 De maneira resumida, este trabalho consistia na criação de uma Base de dados SQL, que armazena ordens de fabrico de uma fabrica e que fosse capaz de realizar as consultas especificadas no enunciado. Para melhor entendimento de tudo o que desenvolvemos é só consultar o nosso relatorio, ficheiro "Relatorio_BD", onde lá possui toda a documentação sobre o nosso trabalho e também todos os passos que realizamos para o desenvolvimento da BD.
-Toda a informação sobre o que era pertendido desenvolver no trabalho está disponível no ficheiro "TP - Normal - V1".
+
+
+---
+### 📁 Estrutura de Pastas
+- **Conceptual**: possui todos os diagramas conceptuais que criamos
+- **Desenho Logico**: possui o nosso desenho lógico da base de dados antes e depois da normalização
+- **Tabela ER**: possui o nosso 1º diagrama ER
+- **Backup.zip**: backup da nossa base de dados que pode importar no seu sql server managment
+- **Relatorio_BD.pdf**: relatorio do nosso trabalho, em português
+- **TP - Normal - V1 (1).pdf**: enunciado do trabalho pratico
 
 ---
 ### 🛠️ Linguagens e Ferramentas
